@@ -7,7 +7,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { Button } from "@/components/ui/button";
 import { Bell, User } from "lucide-react";
 import {
@@ -49,6 +50,7 @@ export default function DashboardLayout({
             <main className="flex-1 bg-yellow-300 p-6">{children}</main>
           </SidebarInset>
         </SidebarProvider>
+        <ToastContainer />
       </body>
     </html>
   );

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useDropzone } from "react-dropzone";
@@ -7,11 +7,9 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ImagePlus } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { toast } from "react-toastify";
-
+import { useRouter } from "next/navigation";
 import {
   Form,
   FormControl,
@@ -21,20 +19,8 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
-
+import Image from "next/image";
 import useProductStore from "@/stores/productStore";
-interface Product {
-  id: string;
-  title: string;
-  rating: number;
-  sizes: string;
-  color: string;
-  price: number;
-  mrp: number;
-  available: string;
-  image: File;
-  description?: string;
-}
 
 const formSchema = z.object({
   title: z.string().min(2, "Product title must be at least 2 characters."),
@@ -45,31 +31,48 @@ const formSchema = z.object({
   price: z.coerce.number().positive("Price must be a positive number."),
   mrp: z.coerce.number().positive("MRP must be a positive number."),
   available: z.string(),
-  image: z.string().nonempty("Please upload an image"),
+  image: z.string(),
 });
 
-export default function AddProductForm() {
+export default function EditProductForm({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const { id } = params;
+  //   alert(id);
+  const router = useRouter();
+  const { getProductById, updateProduct } = useProductStore();
+  const product = getProductById(id);
+
   const [preview, setPreview] = React.useState<string | ArrayBuffer | null>(
     null,
   );
-  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = React.useState<boolean>(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onBlur",
-    defaultValues: {
-      title: "",
-      description: "",
-      rating: 0,
-      sizes: "",
-      color: "",
-      price: 0,
-      mrp: 0,
-      available: "yes",
-      image: "",
-    },
+    defaultValues: product
+      ? {
+          title: product.title,
+          description: product.description,
+          rating: product.rating,
+          sizes: product.sizes,
+          color: product.color,
+          price: product.price,
+          mrp: product.mrp,
+          available: product.available,
+          image: product.image,
+        }
+      : undefined,
   });
-  const { addProduct } = useProductStore();
+
+  useEffect(() => {
+    if (product && product.image) {
+      setPreview(product.image);
+    }
+  }, [product]);
 
   const onDrop = React.useCallback(
     (acceptedFiles: File[]) => {
@@ -98,16 +101,15 @@ export default function AddProductForm() {
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     setIsSubmitting(true);
-    addProduct(values);
-    console.log(values);
-    toast.success("Product Added Successfully !", {
-      position: "top-right",
-    });
-    // Simulate an API call
+    updateProduct({ ...values, id });
+    toast.success("Product updated successfully 🎉");
     setTimeout(() => {
       setIsSubmitting(false);
+      router.push("/products");
     }, 1000);
   };
+
+  if (!product) return <p>Product not found.</p>;
 
   return (
     <Form {...form}>
@@ -131,7 +133,7 @@ export default function AddProductForm() {
               </FormItem>
             )}
           />
-
+          {/* Add other fields (rating, sizes, color, price, mrp, available) similar to the Add form */}
           <FormField
             control={form.control}
             name="rating"
@@ -153,7 +155,6 @@ export default function AddProductForm() {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="sizes"
@@ -179,7 +180,6 @@ export default function AddProductForm() {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="color"
@@ -205,7 +205,6 @@ export default function AddProductForm() {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="price"
@@ -225,7 +224,6 @@ export default function AddProductForm() {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="mrp"
@@ -246,7 +244,6 @@ export default function AddProductForm() {
               </FormItem>
             )}
           />
-
           <FormField
             control={form.control}
             name="available"
@@ -269,6 +266,7 @@ export default function AddProductForm() {
             )}
           />
         </div>
+
         <div className="">
           {/* Image Uploader */}
           <FormField
@@ -290,7 +288,7 @@ export default function AddProductForm() {
                     {...getRootProps()}
                     className="mx-auto flex h-full cursor-pointer flex-col items-center justify-center gap-y-2 rounded-lg border border-foreground bg-white p-8 shadow-sm shadow-foreground"
                   >
-                    {preview && (
+                    {preview ? (
                       <Image
                         src={preview as string}
                         alt="Uploaded image"
@@ -299,6 +297,8 @@ export default function AddProductForm() {
                         height={300}
                         layout="intrinsic"
                       />
+                    ) : (
+                      <p>Click or drag an image to upload</p>
                     )}
                     <Input
                       {...getInputProps()}
@@ -308,7 +308,7 @@ export default function AddProductForm() {
                     {isDragActive ? (
                       <p>Drop the image!</p>
                     ) : (
-                      <p>Click or drag an image to upload a product image</p>
+                      <p>Click or drag an image to upload</p>
                     )}
                   </div>
                 </FormControl>
@@ -342,22 +342,23 @@ export default function AddProductForm() {
             )}
           />
         </div>
+
         {/* Action Buttons */}
         <div className="flex justify-end gap-4">
           <Button
-            className="block h-auto rounded-lg px-8 py-3 text-xl"
+            asChild
             variant="outline"
             type="button"
-            asChild
+            className="rounded-lg px-8 py-3 text-xl"
           >
-            <Link href="/">Cancel</Link>
+            <Link href="/products">Cancel</Link>
           </Button>
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="block h-auto rounded-lg px-8 py-3 text-xl"
+            className="rounded-lg px-8 py-3 text-xl"
           >
-            {isSubmitting ? "Adding..." : "Add Product"}
+            {isSubmitting ? "Updating..." : "Update Product"}
           </Button>
         </div>
       </form>
