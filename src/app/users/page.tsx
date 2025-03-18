@@ -57,8 +57,13 @@ export default function CustomersPage() {
                       <Button variant="outline" size="sm" className="w-full">
                         <Link href={`/users/edit/${user.id}`}>Edit</Link>
                       </Button>
-                      <Button variant="outline" size="sm" className="w-full">
-                        View
+                      <Button
+                        variant="default"
+                        size="sm"
+                        className="w-full"
+                        onClick={() => handleDelete(user.id)}
+                      >
+                        Delete
                       </Button>
                     </div>
                   </CardContent>

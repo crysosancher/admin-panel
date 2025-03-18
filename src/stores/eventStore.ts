@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 export interface Event {
   id: string;
   title: string;
+  image?: string;
   description?: string;
   startDate: string;
   endDate: string;

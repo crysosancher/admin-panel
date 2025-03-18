@@ -133,7 +133,7 @@ export default function EditProductForm({
               </FormItem>
             )}
           />
-          {/* Add other fields (rating, sizes, color, price, mrp, available) similar to the Add form */}
+
           <FormField
             control={form.control}
             name="rating"

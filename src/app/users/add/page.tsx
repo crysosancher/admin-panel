@@ -27,7 +27,7 @@ import { Input } from "@/components/ui/input";
 
 import Link from "next/link";
 import { toast } from "react-toastify";
-
+import useUserStore from "@/stores/userStore";
 const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
@@ -49,10 +49,10 @@ export default function AddCustomerPage() {
       email: "",
     },
   });
-
+  const { addUser } = useUserStore();
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-
+    addUser(values);
     // Simulate API call
     setTimeout(() => {
       console.log(values);

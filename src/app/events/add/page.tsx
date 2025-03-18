@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -30,6 +30,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import useEventStore from "@/stores/eventStore";
+import { useDropzone } from "react-dropzone";
+import Image from "next/image";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -67,11 +70,14 @@ const formSchema = z.object({
       },
     ),
   details: z.string().optional(),
+  image: z.string().nonempty("Please upload an image"),
 });
 
 export default function AddEventPage() {
   const router = useRouter();
-
+  const [preview, setPreview] = React.useState<string | ArrayBuffer | null>(
+    null,
+  );
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -87,20 +93,47 @@ export default function AddEventPage() {
       pricingType: "free",
       price: undefined,
       details: "",
+      image: "",
     },
   });
+
+  const { addEvent } = useEventStore();
+  // iMAGE
+  const onDrop = React.useCallback(
+    (acceptedFiles: File[]) => {
+      if (acceptedFiles.length === 0) return;
+      const file = acceptedFiles[0];
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64String = reader.result as string;
+        setPreview(base64String);
+        form.setValue("image", base64String);
+        form.clearErrors("image");
+      };
+      reader.readAsDataURL(file);
+    },
+    [form],
+  );
+  const { getRootProps, getInputProps, isDragActive, fileRejections } =
+    useDropzone({
+      onDrop,
+      maxFiles: 1,
+      maxSize: 1000000,
+      accept: { "image/png": [], "image/jpg": [], "image/jpeg": [] },
+    });
 
   const watchPricingType = form.watch("pricingType");
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-
+    addEvent(values);
     // Simulate API call
     setTimeout(() => {
       console.log(values);
       setIsSubmitting(false);
       toast.success("Event added successfully!");
-      router.push("/dashboard/events");
+      router.push("/events");
     }, 1000);
   }
 
@@ -149,7 +182,62 @@ export default function AddEventPage() {
                   </FormItem>
                 )}
               />
-
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={() => (
+                    <FormItem className="">
+                      <FormLabel
+                        className={
+                          fileRejections.length !== 0 ? "text-destructive" : ""
+                        }
+                      >
+                        <h2 className="text-xl font-semibold tracking-tight">
+                          Upload Product Image
+                        </h2>
+                      </FormLabel>
+                      <FormControl>
+                        <div
+                          {...getRootProps()}
+                          className="mx-auto flex h-full cursor-pointer flex-col items-center justify-center gap-y-2 rounded-lg border border-foreground bg-white p-8 shadow-sm shadow-foreground"
+                        >
+                          {preview && (
+                            <Image
+                              src={preview as string}
+                              alt="Uploaded image"
+                              className="max-h-[200px] rounded-lg object-contain"
+                              width={400}
+                              height={300}
+                              layout="intrinsic"
+                            />
+                          )}
+                          <Input
+                            {...getInputProps()}
+                            type="file"
+                            className="hidden"
+                          />
+                          {isDragActive ? (
+                            <p>Drop the image!</p>
+                          ) : (
+                            <p>
+                              Click or drag an image to upload a event image
+                            </p>
+                          )}
+                        </div>
+                      </FormControl>
+                      <FormMessage>
+                        {fileRejections.length !== 0 && (
+                          <p>
+                            Image must be less than 1MB and of type png, jpg, or
+                            jpeg
+                          </p>
+                        )}
+                      </FormMessage>
+                    </FormItem>
+                  )}
+                />
+              </div>
               <FormField
                 control={form.control}
                 name="days"
@@ -361,7 +449,7 @@ export default function AddEventPage() {
 
               <div className="flex justify-end gap-4">
                 <Button variant="outline" type="button" asChild>
-                  <Link href="/dashboard/events">Cancel</Link>
+                  <Link href="/events">Cancel</Link>
                 </Button>
                 <Button type="submit" disabled={isSubmitting}>
                   {isSubmitting ? "Adding..." : "Add Event"}

@@ -23,18 +23,6 @@ import {
 } from "@/components/ui/form";
 
 import useProductStore from "@/stores/productStore";
-interface Product {
-  id: string;
-  title: string;
-  rating: number;
-  sizes: string;
-  color: string;
-  price: number;
-  mrp: number;
-  available: string;
-  image: File;
-  description?: string;
-}
 
 const formSchema = z.object({
   title: z.string().min(2, "Product title must be at least 2 characters."),
@@ -269,8 +257,8 @@ export default function AddProductForm() {
             )}
           />
         </div>
+        {/* Image Uploader */}
         <div className="">
-          {/* Image Uploader */}
           <FormField
             control={form.control}
             name="image"
