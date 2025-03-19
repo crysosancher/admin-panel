@@ -14,32 +14,33 @@ import useProductStore, { Product } from "@/stores/productStore";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
 
 export default function ProductsPage() {
-  const { products, deleteProduct } = useProductStore();
+  // Only use deleteProduct from the store since filtering will be done on searchProducts.
+  const { deleteProduct } = useProductStore();
+  const [query, setQuery] = useState("");
+  const searchProducts = useProductStore((state) => state.searchProducts);
+  // Filter products by title using the search query.
+  const filteredProducts = searchProducts(query);
 
   const handleDelete = (id: string) => {
     deleteProduct(id);
     toast.success("Product deleted successfully!");
   };
-  console.log(products);
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Products</h1>
-        <Input
-          className="w-[500px] border-2 border-black"
-          type="text"
-          placeholder="Search Products"
-        />
-
-        {/* <Button asChild>
-          <Link href="/products/add">
-            <Plus className="mr-2 h-4 w-4" />
-            Add New Product
-          </Link>
-        </Button> */}
+        <div className="flex items-center gap-4">
+          <Input
+            type="text"
+            value={query}
+            placeholder="Search products by title..."
+            onChange={(e) => setQuery(e.target.value)}
+          />
+        </div>
       </div>
 
       <Card>
@@ -49,12 +50,12 @@ export default function ProductsPage() {
         </CardHeader>
         <CardContent>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {products.length > 0 ? (
-              products.map((product: Product) => (
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product: Product) => (
                 <Card key={product.id} className="overflow-hidden">
                   <div className="aspect-square bg-muted">
                     <Image
-                      src={product.image as unknown as string}
+                      src={product.image as string}
                       alt="Product Image"
                       width={400}
                       height={300}
@@ -90,7 +91,7 @@ export default function ProductsPage() {
                 </Card>
               ))
             ) : (
-              <p>No products added yet.</p>
+              <p>No products found.</p>
             )}
           </div>
         </CardContent>

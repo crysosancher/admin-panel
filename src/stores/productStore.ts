@@ -23,6 +23,7 @@ interface ProductStore {
   updateProduct: (updatedProduct: Product) => void;
   getProductById: (id: string) => Product | undefined;
   deleteProduct: (id: string) => void;
+  searchProducts: (query: string) => Product[];
 }
 
 const useProductStore = create<ProductStore>()(
@@ -44,7 +45,6 @@ const useProductStore = create<ProductStore>()(
           }
         });
       },
-
       getProductById: (id: string) =>
         get().products.find((product) => product.id === id),
       deleteProduct: (id: string) =>
@@ -53,9 +53,16 @@ const useProductStore = create<ProductStore>()(
             (product: Product) => product.id !== id,
           );
         }),
+
+      searchProducts: (query: string) => {
+        const lowerCaseQuery = query.toLowerCase();
+        return get().products.filter((product) =>
+          product.title.toLowerCase().includes(lowerCaseQuery),
+        );
+      },
     })),
     {
-      name: "product-store", // localStorage key
+      name: "product-store",
     },
   ),
 );

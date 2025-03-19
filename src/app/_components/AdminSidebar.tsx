@@ -4,6 +4,7 @@ import {
   Banknote,
   BarChart3,
   Box,
+  HeartHandshake,
   Home,
   LayoutDashboard,
   Package,
@@ -137,8 +138,8 @@ export function AdminSidebar() {
               asChild
               isActive={isActive("/products")}
             >
-              <Link href="/products/add">
-                <Banknote className="h-8 w-8" />
+              <Link href="/donations">
+                <HeartHandshake className="h-8 w-8" />
                 <span className="text-lg">Donation History</span>
               </Link>
             </SidebarMenuButton>
