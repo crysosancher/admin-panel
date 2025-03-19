@@ -30,7 +30,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import useEventStore from "@/stores/eventStore";
+import useEventStore, { PricingType } from "@/stores/eventStore";
 import { useDropzone } from "react-dropzone";
 import Image from "next/image";
 
@@ -56,7 +56,8 @@ const formSchema = z.object({
   location: z.string().min(2, {
     message: "Location must be at least 2 characters.",
   }),
-  pricingType: z.enum(["free", "paid"]),
+  pricingType: z.nativeEnum(PricingType),
+
   price: z.coerce
     .number()
     .optional()
