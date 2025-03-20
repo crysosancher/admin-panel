@@ -96,18 +96,7 @@ export function AdminSidebar() {
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem className="">
-            <SidebarMenuButton
-              className="rounded-none bg-white p-6"
-              asChild
-              isActive={isActive("/products")}
-            >
-              <Link href="/users/add">
-                <UserPlus className="h-8 w-8" />
-                <span className="text-lg">Add New User</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+
           <SidebarMenuItem className="">
             <SidebarMenuButton
               className="rounded-none bg-white p-6"
@@ -141,6 +130,18 @@ export function AdminSidebar() {
               <Link href="/donations">
                 <HeartHandshake className="h-8 w-8" />
                 <span className="text-lg">Donation History</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem className="">
+            <SidebarMenuButton
+              className="rounded-none bg-white p-6"
+              asChild
+              isActive={isActive("/blogs")}
+            >
+              <Link href="/blogs">
+                <HeartHandshake className="h-8 w-8" />
+                <span className="text-lg">Blogs</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

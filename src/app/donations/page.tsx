@@ -29,85 +29,79 @@ import { MoreHorizontal } from "lucide-react";
 import useDonationStore from "@/stores/donationStore";
 
 // Sample donation data
-// const donations = [
-//   {
-//     id: "DON-001",
-//     name: "John Smith",
-//     email: "john.smith@example.com",
-//     amount: 250.0,
-//     date: "2025-03-15",
-//     message: "Keep up the great work!",
-//   },
-//   {
-//     id: "DON-002",
-//     name: "Sarah Johnson",
-//     email: "sarah.j@example.com",
-//     amount: 100.0,
-//     date: "2025-03-14",
-//     message: "Happy to support your cause.",
-//   },
-//   {
-//     id: "DON-003",
-//     name: "Michael Brown",
-//     email: "mbrown@example.com",
-//     amount: 500.0,
-//     date: "2025-03-12",
-//     message: "For the children's education program.",
-//   },
-//   {
-//     id: "DON-004",
-//     name: "Emily Davis",
-//     email: "emily.davis@example.com",
-//     amount: 75.0,
-//     date: "2025-03-10",
-//     message: "",
-//   },
-//   {
-//     id: "DON-005",
-//     name: "Robert Wilson",
-//     email: "rwilson@example.com",
-//     amount: 1000.0,
-//     date: "2025-03-08",
-//     message: "Annual donation for your foundation.",
-//   },
-//   {
-//     id: "DON-006",
-//     name: "Jennifer Lee",
-//     email: "jlee@example.com",
-//     amount: 150.0,
-//     date: "2025-03-05",
-//     message: "In memory of my father.",
-//   },
-//   {
-//     id: "DON-007",
-//     name: "David Miller",
-//     email: "dmiller@example.com",
-//     amount: 300.0,
-//     date: "2025-03-03",
-//     message: "To support the new building project.",
-//   },
-//   {
-//     id: "DON-008",
-//     name: "Lisa Anderson",
-//     email: "lisa.a@example.com",
-//     amount: 50.0,
-//     date: "2025-03-01",
-//     message: "Monthly contribution.",
-//   },
-// ];
+const donations = [
+  {
+    id: "DON-001",
+    name: "John Smith",
+    email: "john.smith@example.com",
+    amount: 250.0,
+    date: "2025-03-15",
+    message: "Keep up the great work!",
+  },
+  {
+    id: "DON-002",
+    name: "Sarah Johnson",
+    email: "sarah.j@example.com",
+    amount: 100.0,
+    date: "2025-03-14",
+    message: "Happy to support your cause.",
+  },
+  {
+    id: "DON-003",
+    name: "Michael Brown",
+    email: "mbrown@example.com",
+    amount: 500.0,
+    date: "2025-03-12",
+    message: "For the children's education program.",
+  },
+  {
+    id: "DON-004",
+    name: "Emily Davis",
+    email: "emily.davis@example.com",
+    amount: 75.0,
+    date: "2025-03-10",
+    message: "",
+  },
+  {
+    id: "DON-005",
+    name: "Robert Wilson",
+    email: "rwilson@example.com",
+    amount: 1000.0,
+    date: "2025-03-08",
+    message: "Annual donation for your foundation.",
+  },
+  {
+    id: "DON-006",
+    name: "Jennifer Lee",
+    email: "jlee@example.com",
+    amount: 150.0,
+    date: "2025-03-05",
+    message: "In memory of my father.",
+  },
+  {
+    id: "DON-007",
+    name: "David Miller",
+    email: "dmiller@example.com",
+    amount: 300.0,
+    date: "2025-03-03",
+    message: "To support the new building project.",
+  },
+  {
+    id: "DON-008",
+    name: "Lisa Anderson",
+    email: "lisa.a@example.com",
+    amount: 50.0,
+    date: "2025-03-01",
+    message: "Monthly contribution.",
+  },
+];
 
 export default function DonationsPage() {
-  const { donations } = useDonationStore();
+  // const { donations } = useDonationStore();
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Donations</h1>
-        <Button asChild>
-          <Link href="donations/add">
-            <Plus className="mr-2 h-4 w-4" />
-            Add New Donation
-          </Link>
-        </Button>
       </div>
 
       <Card>

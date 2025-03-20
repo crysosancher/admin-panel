@@ -13,6 +13,7 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import ProductsPage from "../products/page";
 
+const users = [{}];
 export default function CustomersPage() {
   const { users, deleteUser } = useUserStore();
 
