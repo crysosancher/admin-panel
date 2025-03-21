@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,8 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Plus, Trash2 } from "lucide-react";
-import Link from "next/link";
+import { Search, Trash2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -17,6 +17,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
 import useUserStore from "@/stores/userStore";
 
 const customers = [
@@ -71,6 +72,22 @@ const customers = [
 ];
 
 export default function CustomersPage() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredCustomers, setFilteredCustomers] = useState(customers);
+
+  const handleSearch = () => {
+    if (!searchTerm.trim()) {
+      setFilteredCustomers(customers);
+    } else {
+      const filtered = customers.filter(
+        (customer) =>
+          customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          customer.email.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+      setFilteredCustomers(filtered);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -83,6 +100,17 @@ export default function CustomersPage() {
           <CardDescription>Manage your user database.</CardDescription>
         </CardHeader>
         <CardContent>
+          <div className="mb-4 flex items-center space-x-2">
+            <Input
+              placeholder="Search by name or email"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Button variant="outline" onClick={handleSearch}>
+              <Search className="h-4 w-4" />
+              <span className="sr-only">Search</span>
+            </Button>
+          </div>
           <Table>
             <TableHeader>
               <TableRow>
@@ -94,7 +122,7 @@ export default function CustomersPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {customers.map((user) => (
+              {filteredCustomers.map((user) => (
                 <TableRow key={user.id}>
                   <TableCell className="font-medium">{user.id}</TableCell>
                   <TableCell>{user.name}</TableCell>
