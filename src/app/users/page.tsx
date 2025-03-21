@@ -7,31 +7,74 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import useUserStore, { User } from "@/stores/userStore";
-import { Mail } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { toast } from "react-toastify";
-import ProductsPage from "../products/page";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import useUserStore from "@/stores/userStore";
 
-const users = [{}];
+const customers = [
+  {
+    id: "USR-001",
+    name: "John Smith",
+    email: "john.smith@example.com",
+    joinedDate: "2025-01-15",
+  },
+  {
+    id: "USR-002",
+    name: "Sarah Johnson",
+    email: "sarah.j@example.com",
+    joinedDate: "2025-01-20",
+  },
+  {
+    id: "USR-003",
+    name: "Michael Brown",
+    email: "mbrown@example.com",
+    joinedDate: "2025-02-05",
+  },
+  {
+    id: "USR-004",
+    name: "Emily Davis",
+    email: "emily.davis@example.com",
+    joinedDate: "2025-02-10",
+  },
+  {
+    id: "USR-005",
+    name: "Robert Wilson",
+    email: "rwilson@example.com",
+    joinedDate: "2025-02-15",
+  },
+  {
+    id: "USR-006",
+    name: "Jennifer Lee",
+    email: "jlee@example.com",
+    joinedDate: "2025-02-20",
+  },
+  {
+    id: "USR-007",
+    name: "David Miller",
+    email: "dmiller@example.com",
+    joinedDate: "2025-03-01",
+  },
+  {
+    id: "USR-008",
+    name: "Lisa Anderson",
+    email: "lisa.a@example.com",
+    joinedDate: "2025-03-10",
+  },
+];
+
 export default function CustomersPage() {
-  const { users, deleteUser } = useUserStore();
-
-  const handleDelete = (id: string) => {
-    deleteUser(id);
-    toast.success("User deleted successfully!");
-  };
-  console.log(users);
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight">Customers</h1>
-        {/* <Button asChild>
-          <Link href="/dashboard/customers/add">
-            <Plus className="mr-2 h-4 w-4" />
-            Add New Customer
-          </Link>
-        </Button> */}
+        <h1 className="text-3xl font-bold tracking-tight">Users</h1>
       </div>
 
       <Card>
@@ -40,40 +83,35 @@ export default function CustomersPage() {
           <CardDescription>Manage your user database.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {users.length > 0 ? (
-              users.map((user: User) => (
-                <Card key={user.id} className="overflow-hidden">
-                  <CardContent className="p-4">
-                    <div className="mb-3 flex items-center gap-3">
-                      <div>
-                        <h3 className="font-semibold">{user?.name}</h3>
-                        <div className="flex items-center text-xs text-muted-foreground">
-                          <Mail className="mr-1 h-3 w-3" />
-                          {user?.email}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mt-4 flex items-center gap-2">
-                      <Button variant="outline" size="sm" className="w-full">
-                        <Link href={`/users/edit/${user.id}`}>Edit</Link>
-                      </Button>
-                      <Button
-                        variant="default"
-                        size="sm"
-                        className="w-full"
-                        onClick={() => handleDelete(user.id)}
-                      >
-                        Delete
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))
-            ) : (
-              <p>No users added yet.</p>
-            )}
-          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>ID</TableHead>
+                <TableHead>Name</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Joined Date</TableHead>
+                <TableHead className="w-[80px]"></TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {customers.map((user) => (
+                <TableRow key={user.id}>
+                  <TableCell className="font-medium">{user.id}</TableCell>
+                  <TableCell>{user.name}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>
+                    {new Date(user.joinedDate).toLocaleDateString()}
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="outline" size="icon" className="h-8 w-8">
+                      <Trash2 className="h-4 w-4" />
+                      <span className="sr-only">Delete user</span>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </CardContent>
       </Card>
     </div>

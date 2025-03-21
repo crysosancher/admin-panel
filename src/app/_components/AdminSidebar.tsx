@@ -8,6 +8,7 @@ import {
   Home,
   LayoutDashboard,
   Package,
+  Rss,
   Settings,
   ShoppingCart,
   ShoppingCartIcon,
@@ -72,18 +73,7 @@ export function AdminSidebar() {
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem className="">
-            <SidebarMenuButton
-              className="rounded-none bg-white p-6"
-              asChild
-              isActive={isActive("/products")}
-            >
-              <Link href="/products/add">
-                <ShoppingCartIcon className="h-8 w-8" />
-                <span className="text-lg">Add New Product</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+
           <SidebarMenuItem className="">
             <SidebarMenuButton
               className="rounded-none bg-white p-6"
@@ -109,18 +99,7 @@ export function AdminSidebar() {
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem className="">
-            <SidebarMenuButton
-              className="rounded-none bg-white p-6"
-              asChild
-              isActive={isActive("/products")}
-            >
-              <Link href="/events/add">
-                <TicketPlus className="h-8 w-8" />
-                <span className="text-lg">Add New Event</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+
           <SidebarMenuItem className="">
             <SidebarMenuButton
               className="rounded-none bg-white p-6"
@@ -140,7 +119,7 @@ export function AdminSidebar() {
               isActive={isActive("/blogs")}
             >
               <Link href="/blogs">
-                <HeartHandshake className="h-8 w-8" />
+                <Rss />
                 <span className="text-lg">Blogs</span>
               </Link>
             </SidebarMenuButton>

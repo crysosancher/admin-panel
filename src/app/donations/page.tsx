@@ -37,6 +37,7 @@ const donations = [
     amount: 250.0,
     date: "2025-03-15",
     message: "Keep up the great work!",
+    donationType: "one-off donation",
   },
   {
     id: "DON-002",
@@ -45,6 +46,7 @@ const donations = [
     amount: 100.0,
     date: "2025-03-14",
     message: "Happy to support your cause.",
+    donationType: "one-off donation",
   },
   {
     id: "DON-003",
@@ -53,6 +55,7 @@ const donations = [
     amount: 500.0,
     date: "2025-03-12",
     message: "For the children's education program.",
+    donationType: "funder",
   },
   {
     id: "DON-004",
@@ -61,6 +64,7 @@ const donations = [
     amount: 75.0,
     date: "2025-03-10",
     message: "",
+    donationType: "donate equipment",
   },
   {
     id: "DON-005",
@@ -69,6 +73,7 @@ const donations = [
     amount: 1000.0,
     date: "2025-03-08",
     message: "Annual donation for your foundation.",
+    donationType: "funder",
   },
   {
     id: "DON-006",
@@ -77,6 +82,7 @@ const donations = [
     amount: 150.0,
     date: "2025-03-05",
     message: "In memory of my father.",
+    donationType: "donate equipment",
   },
   {
     id: "DON-007",
@@ -85,6 +91,7 @@ const donations = [
     amount: 300.0,
     date: "2025-03-03",
     message: "To support the new building project.",
+    donationType: "one-off donation",
   },
   {
     id: "DON-008",
@@ -93,6 +100,7 @@ const donations = [
     amount: 50.0,
     date: "2025-03-01",
     message: "Monthly contribution.",
+    donationType: "one-off donation",
   },
 ];
 
@@ -116,6 +124,7 @@ export default function DonationsPage() {
                 <TableHead>ID</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
+                <TableHead>Donation Type</TableHead>
                 <TableHead className="text-right">Amount</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Message</TableHead>
@@ -128,6 +137,7 @@ export default function DonationsPage() {
                   <TableCell className="font-medium">{donation.id}</TableCell>
                   <TableCell>{donation.name}</TableCell>
                   <TableCell>{donation.email}</TableCell>
+                  <TableCell>{donation.donationType}</TableCell>
                   <TableCell className="text-right">
                     ${donation.amount.toFixed(2)}
                   </TableCell>

@@ -35,12 +35,19 @@ export default function ProductsPage() {
         <h1 className="text-3xl font-bold tracking-tight">Products</h1>
         <div className="flex items-center gap-4">
           <Input
+            className="rounded-lg bg-black text-white placeholder:text-white"
             type="text"
             value={query}
             placeholder="Search products by title..."
             onChange={(e) => setQuery(e.target.value)}
           />
         </div>
+        <Button asChild>
+          <Link href="/products/add">
+            <Plus className="mr-2 h-4 w-4" />
+            Add New Product
+          </Link>
+        </Button>
       </div>
 
       <Card>
