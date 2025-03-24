@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -107,10 +107,11 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length === 0) return;
       const file = acceptedFiles[0];
+      if (!file) return; // extra safety check
 
       const reader = new FileReader();
-      reader.onload = () => {
-        const base64String = reader.result as string;
+      reader.onload = (event) => {
+        const base64String = event.target?.result as string;
         setPreview(base64String);
         form.setValue("image", base64String);
         form.clearErrors("image");
@@ -129,10 +130,19 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
     });
 
   const watchPricingType = form.watch("pricingType");
-
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    updateEvent({ ...values, id });
+
+    // Create a copy of values with guaranteed non-optional properties
+    const eventData = {
+      ...values,
+      price: values.pricingType === "paid" ? values.price || 0 : 0,
+      details: values.details || "",
+    };
+
+    // Pass the updated data with properly defined properties
+    updateEvent({ ...eventData, id });
+
     // Simulate API call
     setTimeout(() => {
       console.log(values);
@@ -158,7 +168,9 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
       <div className="flex h-full items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold">Event not found</h1>
-          <p className="mt-2">The event you're looking for doesn't exist.</p>
+          <p className="mt-2">
+            The event you&aspos;re looking for doesn&apos;t exist.
+          </p>
           <Button className="mt-4" asChild>
             <Link href="/events">Back to Events</Link>
           </Button>

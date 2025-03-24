@@ -1,23 +1,12 @@
 "use client";
 
 import {
-  Banknote,
-  BarChart3,
-  Box,
   HeartHandshake,
-  Home,
   LayoutDashboard,
   Package,
   Rss,
-  Settings,
-  ShoppingCart,
-  ShoppingCartIcon,
   Ticket,
-  TicketPlus,
   User,
-  User2Icon,
-  UserPlus,
-  Users,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -25,7 +14,6 @@ import { usePathname } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -42,7 +30,7 @@ export function AdminSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="bg-yellow-400">
+      <SidebarHeader className="bg-yellow-300">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
@@ -59,11 +47,11 @@ export function AdminSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="bg-yellow-400">
+      <SidebarContent className="bg-yellow-300">
         <SidebarMenu>
           <SidebarMenuItem className="">
             <SidebarMenuButton
-              className="rounded-none bg-white p-6"
+              className="rounded-none bg-yellow-300 p-6"
               asChild
               isActive={isActive("/products")}
             >
@@ -74,11 +62,11 @@ export function AdminSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="">
+          <SidebarMenuItem className="bg-yellow-300">
             <SidebarMenuButton
-              className="rounded-none bg-white p-6"
+              className="rounded-none bg-yellow-300 p-6"
               asChild
-              isActive={isActive("/products")}
+              isActive={isActive("/users")}
             >
               <Link href="/users">
                 <User className="h-8 w-8" />
@@ -89,9 +77,9 @@ export function AdminSidebar() {
 
           <SidebarMenuItem className="">
             <SidebarMenuButton
-              className="rounded-none bg-white p-6"
+              className="rounded-none bg-yellow-300 p-6"
               asChild
-              isActive={isActive("/products")}
+              isActive={isActive("/events")}
             >
               <Link href="/events">
                 <Ticket className="h-8 w-8" />
@@ -102,9 +90,9 @@ export function AdminSidebar() {
 
           <SidebarMenuItem className="">
             <SidebarMenuButton
-              className="rounded-none bg-white p-6"
+              className="rounded-none bg-yellow-300 p-6"
               asChild
-              isActive={isActive("/products")}
+              isActive={isActive("/donations")}
             >
               <Link href="/donations">
                 <HeartHandshake className="h-8 w-8" />
@@ -114,7 +102,7 @@ export function AdminSidebar() {
           </SidebarMenuItem>
           <SidebarMenuItem className="">
             <SidebarMenuButton
-              className="rounded-none bg-white p-6"
+              className="rounded-none bg-yellow-300 p-6"
               asChild
               isActive={isActive("/blogs")}
             >

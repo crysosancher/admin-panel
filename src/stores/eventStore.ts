@@ -2,11 +2,11 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { v4 as uuidv4 } from "uuid";
-import { number } from "zod";
 export enum PricingType {
-  Free = "free",
-  Paid = "paid",
+  FREE = "free",
+  PAID = "paid",
 }
+
 export interface Event {
   id: string;
   days: string[];

@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useFormContext } from "react-hook-form";
 import { z } from "zod";
 import { ArrowLeft, Upload, X, Plus } from "lucide-react";
 import Image from "next/image";
@@ -32,6 +32,15 @@ import Link from "next/link";
 import { toast } from "react-toastify";
 import useBlogStore from "@/stores/blogStore";
 
+// Schema for each content block with required text and an optional image.
+const contentBlockSchema = z.object({
+  text: z.string().min(1, {
+    message: "Content cannot be empty.",
+  }),
+  image: z.string().optional(),
+});
+
+// Main form schema now uses an array of content blocks.
 const formSchema = z.object({
   title: z.string().min(2, {
     message: "Blog title must be at least 2 characters.",
@@ -41,15 +50,129 @@ const formSchema = z.object({
     message: "Please upload a blog image.",
   }),
   content: z
-    .array(
-      z.string().min(1, {
-        message: "Content cannot be empty.",
-      }),
-    )
-    .min(1, {
-      message: "Please add at least one content block.",
-    }),
+    .array(contentBlockSchema)
+    .min(1, { message: "Please add at least one content block." }),
 });
+
+// Component for each content block
+function ContentBlockField({
+  index,
+  remove,
+  canRemove,
+}: {
+  index: number;
+  remove: (index: number) => void;
+  canRemove: boolean;
+}) {
+  // Use the form context to get setValue and control
+  const { setValue, control } = useFormContext();
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const base64String = event.target?.result as string;
+          setPreviewImage(base64String);
+          // Update the image value in the content block using setValue
+          setValue(`content.${index}.image`, base64String);
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    [index, setValue],
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    accept: {
+      "image/*": [".jpeg", ".jpg", ".png", ".gif"],
+    },
+    maxFiles: 1,
+  });
+
+  return (
+    <div className="relative rounded-md border p-4">
+      <FormField
+        control={control}
+        name={`content.${index}.text`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Paragraph {index + 1}</FormLabel>
+            <FormControl>
+              <Textarea
+                placeholder={`Enter paragraph ${index + 1}`}
+                className="min-h-[120px]"
+                {...field}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <div className="mt-4">
+        <FormLabel>Optional Image</FormLabel>
+        <div
+          {...getRootProps()}
+          className={`flex cursor-pointer items-center justify-center rounded-md border-2 border-dashed p-4 ${
+            isDragActive ? "border-primary bg-primary/10" : "border-border"
+          }`}
+        >
+          <input {...getInputProps()} />
+          <div className="flex flex-col items-center gap-1">
+            <Upload className="h-6 w-6 text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">
+              {isDragActive
+                ? "Drop the image here"
+                : "Drag & drop an image here, or click to select"}
+            </p>
+          </div>
+        </div>
+        {previewImage && (
+          <div className="relative mt-2">
+            <div className="relative aspect-video w-full overflow-hidden rounded-md">
+              <Image
+                src={previewImage}
+                alt="Content Preview"
+                fill
+                className="object-cover"
+              />
+            </div>
+            <Button
+              type="button"
+              variant="destructive"
+              size="icon"
+              className="absolute right-2 top-2"
+              onClick={() => {
+                setPreviewImage(null);
+                setValue(`content.${index}.image`, "");
+              }}
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Remove image</span>
+            </Button>
+          </div>
+        )}
+      </div>
+
+      {canRemove && (
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="absolute right-2 top-2"
+          onClick={() => remove(index)}
+        >
+          <X className="h-4 w-4" />
+          <span className="sr-only">Remove paragraph</span>
+        </Button>
+      )}
+    </div>
+  );
+}
 
 export default function AddBlogPage() {
   const router = useRouter();
@@ -63,7 +186,8 @@ export default function AddBlogPage() {
     defaultValues: {
       title: "",
       image: "",
-      content: [""],
+
+      content: [{ text: "", image: "" }],
     },
   });
 
@@ -72,6 +196,7 @@ export default function AddBlogPage() {
     name: "content",
   });
 
+  // Main blog image dropzone
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
@@ -127,6 +252,7 @@ export default function AddBlogPage() {
           <CardDescription>Create a new blog post.</CardDescription>
         </CardHeader>
         <CardContent>
+          {/* Wrap the form with our custom Form component to provide context */}
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <FormField
@@ -147,7 +273,7 @@ export default function AddBlogPage() {
                 name="date"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel> Date</FormLabel>
+                    <FormLabel>Date</FormLabel>
                     <FormControl>
                       <Input type="date" {...field} />
                     </FormControl>
@@ -221,7 +347,7 @@ export default function AddBlogPage() {
                     type="button"
                     variant="outline"
                     size="sm"
-                    onClick={() => append("")}
+                    onClick={() => append({ text: "", image: "" })}
                   >
                     <Plus className="mr-1 h-4 w-4" />
                     Add Paragraph
@@ -230,40 +356,12 @@ export default function AddBlogPage() {
 
                 <div className="space-y-4">
                   {fields.map((field, index) => (
-                    <div key={field.id} className="relative">
-                      <FormField
-                        control={form.control}
-                        name={`content.${index}`}
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <div className="relative">
-                                <Textarea
-                                  placeholder={`Paragraph ${index + 1}`}
-                                  className="min-h-[120px] pr-10"
-                                  {...field}
-                                />
-                                {fields.length > 1 && (
-                                  <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="icon"
-                                    className="absolute right-2 top-2"
-                                    onClick={() => remove(index)}
-                                  >
-                                    <X className="h-4 w-4" />
-                                    <span className="sr-only">
-                                      Remove paragraph
-                                    </span>
-                                  </Button>
-                                )}
-                              </div>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                    <ContentBlockField
+                      key={field.id}
+                      index={index}
+                      remove={remove}
+                      canRemove={fields.length > 1}
+                    />
                   ))}
                 </div>
                 {form.formState.errors.content?.root && (

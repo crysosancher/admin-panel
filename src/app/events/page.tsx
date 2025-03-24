@@ -43,14 +43,13 @@ export default function EventsPage() {
             {events.length > 0 ? (
               events.map((event, i) => (
                 <Card key={i} className="overflow-hidden">
-                  <div className="aspect-auto bg-muted">
+                  <div className="aspect-auto h-[300px] bg-muted">
                     <Image
                       className="h-full"
                       src={event.image as unknown as string}
                       alt="Product Image"
                       width={400}
                       height={500}
-                      layout="responsive"
                     />
                   </div>
                   <CardContent className="p-4">

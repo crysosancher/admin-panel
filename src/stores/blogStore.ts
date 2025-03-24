@@ -8,7 +8,7 @@ export interface Blog {
   title: string;
   date: string;
   image: string;
-  content: string[];
+  content: { text: string; image?: string }[];
 }
 
 interface BlogStore {

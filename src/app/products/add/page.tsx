@@ -7,7 +7,6 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { ImagePlus } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "react-toastify";
@@ -63,7 +62,7 @@ export default function AddProductForm() {
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length === 0) return;
       const file = acceptedFiles[0];
-
+      if (!file || !file.type.startsWith("image/")) return;
       const reader = new FileReader();
       reader.onload = () => {
         const base64String = reader.result as string;
@@ -88,7 +87,7 @@ export default function AddProductForm() {
     setIsSubmitting(true);
     addProduct(values);
     console.log(values);
-    toast.success("Product Added Successfully !", {
+    toast.success("Product Added Successfully!", {
       position: "top-right",
     });
     // Simulate an API call
@@ -258,12 +257,12 @@ export default function AddProductForm() {
           />
         </div>
         {/* Image Uploader */}
-        <div className="">
+        <div>
           <FormField
             control={form.control}
             name="image"
             render={() => (
-              <FormItem className="">
+              <FormItem>
                 <FormLabel
                   className={
                     fileRejections.length !== 0 ? "text-destructive" : ""

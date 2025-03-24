@@ -91,7 +91,7 @@ export default function AddEventPage() {
       startTime: "",
       endTime: "",
       location: "",
-      pricingType: "free",
+      pricingType: PricingType.FREE,
       price: undefined,
       details: "",
       image: "",
@@ -99,15 +99,16 @@ export default function AddEventPage() {
   });
 
   const { addEvent } = useEventStore();
-  // iMAGE
+
   const onDrop = React.useCallback(
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length === 0) return;
       const file = acceptedFiles[0];
+      if (!file) return; // extra safety check
 
       const reader = new FileReader();
-      reader.onload = () => {
-        const base64String = reader.result as string;
+      reader.onload = (event) => {
+        const base64String = event.target?.result as string;
         setPreview(base64String);
         form.setValue("image", base64String);
         form.clearErrors("image");
@@ -116,6 +117,7 @@ export default function AddEventPage() {
     },
     [form],
   );
+
   const { getRootProps, getInputProps, isDragActive, fileRejections } =
     useDropzone({
       onDrop,
@@ -128,8 +130,15 @@ export default function AddEventPage() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     setIsSubmitting(true);
-    addEvent(values);
-    // Simulate API call
+
+    const eventData = {
+      ...values,
+      price: values.pricingType === PricingType.FREE ? 0 : values.price || 0,
+      details: values.details || "",
+    };
+
+    addEvent(eventData);
+
     setTimeout(() => {
       console.log(values);
       setIsSubmitting(false);
@@ -137,7 +146,6 @@ export default function AddEventPage() {
       router.push("/events");
     }, 1000);
   }
-
   const days = [
     { id: "sun", label: "Sunday" },
     { id: "mon", label: "Monday" },
@@ -379,7 +387,7 @@ export default function AddEventPage() {
                       >
                         <FormItem className="flex items-center space-x-3 space-y-0">
                           <FormControl>
-                            <RadioGroupItem value="free" />
+                            <RadioGroupItem value={PricingType.FREE} />
                           </FormControl>
                           <FormLabel className="font-normal">
                             Free Event
@@ -387,7 +395,7 @@ export default function AddEventPage() {
                         </FormItem>
                         <FormItem className="flex items-center space-x-3 space-y-0">
                           <FormControl>
-                            <RadioGroupItem value="paid" />
+                            <RadioGroupItem value={PricingType.PAID} />
                           </FormControl>
                           <FormLabel className="font-normal">
                             Paid Event
@@ -400,7 +408,7 @@ export default function AddEventPage() {
                 )}
               />
 
-              {watchPricingType === "paid" && (
+              {watchPricingType === PricingType.PAID && (
                 <FormField
                   control={form.control}
                   name="price"

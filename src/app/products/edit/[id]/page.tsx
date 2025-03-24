@@ -78,7 +78,7 @@ export default function EditProductForm({
     (acceptedFiles: File[]) => {
       if (acceptedFiles.length === 0) return;
       const file = acceptedFiles[0];
-
+      if (!file || !file.type.startsWith("image/")) return;
       const reader = new FileReader();
       reader.onload = () => {
         const base64String = reader.result as string;
