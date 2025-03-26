@@ -1,5 +1,5 @@
 "use client";
-
+import React, { useState, useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import {
   Table,
   TableBody,
@@ -16,11 +15,26 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 // Sample donation data
 const donations = [
   {
-    id: "DON-001",
     name: "John Smith",
     email: "john.smith@example.com",
     amount: 250.0,
@@ -29,7 +43,6 @@ const donations = [
     donationType: "one-off donation",
   },
   {
-    id: "DON-002",
     name: "Sarah Johnson",
     email: "sarah.j@example.com",
     amount: 100.0,
@@ -38,7 +51,6 @@ const donations = [
     donationType: "one-off donation",
   },
   {
-    id: "DON-003",
     name: "Michael Brown",
     email: "mbrown@example.com",
     amount: 500.0,
@@ -47,7 +59,6 @@ const donations = [
     donationType: "funder",
   },
   {
-    id: "DON-004",
     name: "Emily Davis",
     email: "emily.davis@example.com",
     amount: 75.0,
@@ -56,7 +67,6 @@ const donations = [
     donationType: "donate equipment",
   },
   {
-    id: "DON-005",
     name: "Robert Wilson",
     email: "rwilson@example.com",
     amount: 1000.0,
@@ -65,7 +75,6 @@ const donations = [
     donationType: "funder",
   },
   {
-    id: "DON-006",
     name: "Jennifer Lee",
     email: "jlee@example.com",
     amount: 150.0,
@@ -74,7 +83,6 @@ const donations = [
     donationType: "donate equipment",
   },
   {
-    id: "DON-007",
     name: "David Miller",
     email: "dmiller@example.com",
     amount: 300.0,
@@ -83,7 +91,6 @@ const donations = [
     donationType: "one-off donation",
   },
   {
-    id: "DON-008",
     name: "Lisa Anderson",
     email: "lisa.a@example.com",
     amount: 50.0,
@@ -94,7 +101,38 @@ const donations = [
 ];
 
 export default function DonationsPage() {
-  // const { donations } = useDonationStore();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [donationTypeFilter, setDonationTypeFilter] = useState("ALL");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  // Get unique donation types for filter
+  const donationTypes = [
+    "ALL",
+    ...new Set(donations.map((d) => d.donationType)),
+  ];
+
+  // Filter donations based on search and type
+  const filteredDonations = useMemo(() => {
+    return donations.filter(
+      (donation) =>
+        (searchTerm === "" ||
+          donation.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          donation.email.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        (donationTypeFilter === "ALL" ||
+          donation.donationType === donationTypeFilter),
+    );
+  }, [searchTerm, donationTypeFilter]);
+
+  // Paginate filtered donations
+  const paginatedDonations = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredDonations.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredDonations, currentPage]);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredDonations.length / itemsPerPage);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -105,25 +143,56 @@ export default function DonationsPage() {
         <CardHeader>
           <CardTitle>Donation History</CardTitle>
           <CardDescription>View all donations received.</CardDescription>
+          <div className="mb-4 flex w-full space-x-4">
+            <Input
+              placeholder="Search by name or email"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              className=""
+            />
+
+            <Select
+              value={donationTypeFilter}
+              onValueChange={(value) => {
+                setDonationTypeFilter(value);
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Donation Type" />
+              </SelectTrigger>
+              <SelectContent>
+                {donationTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type === "ALL" ? "All Types" : type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </CardHeader>
         <CardContent>
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-yellow-200">
               <TableRow>
-                <TableHead>ID</TableHead>
+                <TableHead>S.No</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Donation Type</TableHead>
                 <TableHead className="text-right">Amount</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Message</TableHead>
-                <TableHead className="w-[50px]"></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {donations.map((donation) => (
-                <TableRow key={donation.id}>
-                  <TableCell className="font-medium">{donation.id}</TableCell>
+              {paginatedDonations.map((donation, index) => (
+                <TableRow key={donation.email}>
+                  <TableCell className="font-medium">
+                    {(currentPage - 1) * itemsPerPage + index + 1}
+                  </TableCell>
                   <TableCell>{donation.name}</TableCell>
                   <TableCell>{donation.email}</TableCell>
                   <TableCell>{donation.donationType}</TableCell>
@@ -140,6 +209,46 @@ export default function DonationsPage() {
               ))}
             </TableBody>
           </Table>
+
+          {/* Pagination */}
+          <div className="mt-4 flex justify-center">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage(Math.max(1, currentPage - 1));
+                    }}
+                  />
+                </PaginationItem>
+                {[...Array(totalPages)].map((_, i) => (
+                  <PaginationItem key={i}>
+                    <PaginationLink
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentPage(i + 1);
+                      }}
+                      isActive={currentPage === i + 1}
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage(Math.min(totalPages, currentPage + 1));
+                    }}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
         </CardContent>
       </Card>
     </div>
