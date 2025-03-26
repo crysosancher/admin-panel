@@ -112,9 +112,8 @@ function ContentBlockField({
           </FormItem>
         )}
       />
-
-      <div className="mt-4">
-        <FormLabel>Optional Image</FormLabel>
+      <FormLabel>Optional Image</FormLabel>
+      <div className="mt-4 flex justify-between">
         <div
           {...getRootProps()}
           className={`flex cursor-pointer items-center justify-center rounded-md border-2 border-dashed p-4 ${
@@ -137,7 +136,8 @@ function ContentBlockField({
               <Image
                 src={previewImage}
                 alt="Content Preview"
-                fill
+                width={400}
+                height={600}
                 className="object-cover"
               />
             </div>
@@ -237,7 +237,12 @@ export default function AddBlogPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" asChild>
+        <Button
+          variant="ghost"
+          className="hover:bg-yellow-200"
+          size="icon"
+          asChild
+        >
           <Link href="/blogs">
             <ArrowLeft className="h-4 w-4" />
             <span className="sr-only">Back</span>
@@ -287,7 +292,7 @@ export default function AddBlogPage() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Blog Image</FormLabel>
-                    <FormControl>
+                    <FormControl className="flex justify-between">
                       <div className="space-y-4">
                         <div
                           {...getRootProps()}
@@ -310,11 +315,12 @@ export default function AddBlogPage() {
                         </div>
                         {previewImage && (
                           <div className="relative">
-                            <div className="relative aspect-video w-full overflow-hidden rounded-md">
+                            <div className="relative aspect-video overflow-hidden rounded-md">
                               <Image
                                 src={previewImage || "/placeholder.svg"}
                                 alt="Preview"
-                                fill
+                                height={300}
+                                width={500}
                                 className="object-cover"
                               />
                             </div>
