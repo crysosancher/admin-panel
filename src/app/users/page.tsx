@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Search, Trash2 } from "lucide-react";
+import { Trash2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -18,72 +18,113 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
-const customers = [
+interface User {
+  name: string;
+  email: string;
+  joinedDate: string;
+}
+
+const initialCustomers = [
   {
-    id: "USR-001",
     name: "John Smith",
     email: "john.smith@example.com",
     joinedDate: "2025-01-15",
   },
   {
-    id: "USR-002",
     name: "Sarah Johnson",
     email: "sarah.j@example.com",
     joinedDate: "2025-01-20",
   },
   {
-    id: "USR-003",
     name: "Michael Brown",
     email: "mbrown@example.com",
     joinedDate: "2025-02-05",
   },
   {
-    id: "USR-004",
     name: "Emily Davis",
     email: "emily.davis@example.com",
     joinedDate: "2025-02-10",
   },
   {
-    id: "USR-005",
     name: "Robert Wilson",
     email: "rwilson@example.com",
     joinedDate: "2025-02-15",
   },
   {
-    id: "USR-006",
     name: "Jennifer Lee",
     email: "jlee@example.com",
     joinedDate: "2025-02-20",
   },
   {
-    id: "USR-007",
     name: "David Miller",
     email: "dmiller@example.com",
     joinedDate: "2025-03-01",
   },
   {
-    id: "USR-008",
     name: "Lisa Anderson",
     email: "lisa.a@example.com",
     joinedDate: "2025-03-10",
   },
 ];
 
-export default function CustomersPage() {
+export default function UsersPage() {
+  const [customers, setCustomers] = useState(initialCustomers);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filteredCustomers, setFilteredCustomers] = useState(customers);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [customerToDelete, setCustomerToDelete] = useState<User | null>(null);
+  const itemsPerPage = 5;
 
-  const handleSearch = () => {
-    if (!searchTerm.trim()) {
-      setFilteredCustomers(customers);
-    } else {
-      const filtered = customers.filter(
-        (customer) =>
-          customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          customer.email.toLowerCase().includes(searchTerm.toLowerCase()),
+  // Filter customers based on search term
+  const filteredCustomers = useMemo(() => {
+    return customers.filter(
+      (customer) =>
+        customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        customer.email.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+  }, [customers, searchTerm]);
+
+  // Paginate filtered customers
+  const paginatedCustomers = useMemo(() => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredCustomers.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredCustomers, currentPage]);
+
+  // Calculate total pages
+  const totalPages = Math.ceil(filteredCustomers.length / itemsPerPage);
+
+  // Handle customer deletion
+  const handleDeleteCustomer = () => {
+    if (customerToDelete) {
+      setCustomers(
+        customers.filter(
+          (customer) => customer.email !== customerToDelete.email,
+        ),
       );
-      setFilteredCustomers(filtered);
+      setCustomerToDelete(null);
+      // Reset page if needed
+      if (paginatedCustomers.length === 1 && currentPage > 1) {
+        setCurrentPage(currentPage - 1);
+      }
     }
   };
 
@@ -92,53 +133,120 @@ export default function CustomersPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Users</h1>
       </div>
-
       <Card>
         <CardHeader>
           <CardTitle>User List</CardTitle>
           <CardDescription>Manage your user database.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="mb-4 flex items-center space-x-2">
+          <div className="mb-4">
             <Input
               placeholder="Search by name or email"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
             />
-            <Button variant="outline" onClick={handleSearch}>
-              <Search className="h-4 w-4" />
-              <span className="sr-only">Search</span>
-            </Button>
           </div>
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-yellow-200">
               <TableRow>
-                <TableHead>ID</TableHead>
+                <TableHead>S.No</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Email</TableHead>
                 <TableHead>Joined Date</TableHead>
-                <TableHead className="w-[80px]"></TableHead>
+                <TableHead className="w-[80px] text-center">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredCustomers.map((user) => (
-                <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.id}</TableCell>
+              {paginatedCustomers.map((user: User, index: number) => (
+                <TableRow key={user.email}>
+                  <TableCell className="font-medium">
+                    {(currentPage - 1) * itemsPerPage + index + 1}
+                  </TableCell>
                   <TableCell>{user.name}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
                     {new Date(user.joinedDate).toLocaleDateString()}
                   </TableCell>
-                  <TableCell>
-                    <Button variant="outline" size="icon" className="h-8 w-8">
-                      <Trash2 className="h-4 w-4" />
-                      <span className="sr-only">Delete user</span>
-                    </Button>
+                  <TableCell className="text-center">
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="icon"
+                          className="h-8 w-8 bg-red-700 text-yellow-200 hover:bg-red-600 hover:text-yellow-100"
+                          onClick={() => setCustomerToDelete(user)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                          <span className="sr-only">Delete user</span>
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>
+                            Are you absolutely sure?
+                          </AlertDialogTitle>
+                          <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete the user account for {customerToDelete?.name}{" "}
+                            ({customerToDelete?.email}).
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Cancel</AlertDialogCancel>
+                          <AlertDialogAction onClick={handleDeleteCustomer}>
+                            Continue
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
+
+          {/* Pagination */}
+          <div className="mt-4 flex justify-center">
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage(Math.max(1, currentPage - 1));
+                    }}
+                  />
+                </PaginationItem>
+                {[...Array(totalPages)].map((_, i) => (
+                  <PaginationItem key={i}>
+                    <PaginationLink
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setCurrentPage(i + 1);
+                      }}
+                      isActive={currentPage === i + 1}
+                    >
+                      {i + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage(Math.min(totalPages, currentPage + 1));
+                    }}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
         </CardContent>
       </Card>
     </div>
