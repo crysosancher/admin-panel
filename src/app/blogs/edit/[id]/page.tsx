@@ -117,47 +117,50 @@ function ContentBlockField({
 
       <div className="mt-4">
         <FormLabel>Optional Image</FormLabel>
-        <div
-          {...getRootProps()}
-          className={`flex cursor-pointer items-center justify-center rounded-md border-2 border-dashed p-4 ${
-            isDragActive ? "border-primary bg-primary/10" : "border-border"
-          }`}
-        >
-          <input {...getInputProps()} />
-          <div className="flex flex-col items-center gap-1">
-            <Upload className="h-6 w-6 text-muted-foreground" />
-            <p className="text-sm text-muted-foreground">
-              {isDragActive
-                ? "Drop the image here"
-                : "Drag & drop an image here, or click to select"}
-            </p>
-          </div>
-        </div>
-        {previewImage && (
-          <div className="relative mt-2">
-            <div className="relative aspect-video w-full overflow-hidden rounded-md">
-              <Image
-                src={previewImage}
-                alt="Content Preview"
-                fill
-                className="object-cover"
-              />
+        <div className="mt-4 flex justify-between">
+          <div
+            {...getRootProps()}
+            className={`flex cursor-pointer items-center justify-center rounded-md border-2 border-dashed p-4 ${
+              isDragActive ? "border-primary bg-primary/10" : "border-border"
+            }`}
+          >
+            <input {...getInputProps()} />
+            <div className="flex flex-col items-center gap-1">
+              <Upload className="h-6 w-6 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">
+                {isDragActive
+                  ? "Drop the image here"
+                  : "Drag & drop an image here, or click to select"}
+              </p>
             </div>
-            <Button
-              type="button"
-              variant="destructive"
-              size="icon"
-              className="absolute right-2 top-2"
-              onClick={() => {
-                setPreviewImage(null);
-                setValue(`content.${index}.image`, "");
-              }}
-            >
-              <X className="h-4 w-4" />
-              <span className="sr-only">Remove image</span>
-            </Button>
           </div>
-        )}
+          {previewImage && (
+            <div className="relative mt-2">
+              <div className="relative aspect-video w-full overflow-hidden rounded-md">
+                <Image
+                  src={previewImage}
+                  alt="Content Preview"
+                  height={300}
+                  width={500}
+                  className="object-cover"
+                />
+              </div>
+              <Button
+                type="button"
+                variant="destructive"
+                size="icon"
+                className="absolute right-2 top-2"
+                onClick={() => {
+                  setPreviewImage(null);
+                  setValue(`content.${index}.image`, "");
+                }}
+              >
+                <X className="h-4 w-4" />
+                <span className="sr-only">Remove image</span>
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
 
       {canRemove && (
@@ -277,7 +280,12 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" asChild>
+        <Button
+          variant="ghost"
+          className="hover:bg-yellow-200"
+          size="icon"
+          asChild
+        >
           <Link href="/blogs">
             <ArrowLeft className="h-4 w-4" />
             <span className="sr-only">Back</span>
@@ -326,7 +334,7 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Blog Image</FormLabel>
-                    <FormControl>
+                    <FormControl className="flex justify-between">
                       <div className="space-y-4">
                         <div
                           {...getRootProps()}
@@ -353,7 +361,8 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
                               <Image
                                 src={previewImage || "/placeholder.svg"}
                                 alt="Preview"
-                                fill
+                                height={300}
+                                width={500}
                                 className="object-cover"
                               />
                             </div>
