@@ -86,7 +86,7 @@ export default function EventsPage() {
                         <Link href={`/events/edit/${event.id}`}>Edit</Link>
                       </Button>
                       <Button
-                        variant="default"
+                        variant="destructive"
                         size="sm"
                         className="w-full"
                         onClick={() => handleDelete(event.id)}
