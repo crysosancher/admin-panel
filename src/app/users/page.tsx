@@ -214,6 +214,7 @@ export default function UsersPage() {
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious
+                    className="hover:bg-yellow-100"
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
@@ -224,6 +225,7 @@ export default function UsersPage() {
                 {[...Array(totalPages)].map((_, i) => (
                   <PaginationItem key={i}>
                     <PaginationLink
+                      className="hover:bg-yellow-100"
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
@@ -237,6 +239,7 @@ export default function UsersPage() {
                 ))}
                 <PaginationItem>
                   <PaginationNext
+                    className="hover:bg-yellow-100"
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
