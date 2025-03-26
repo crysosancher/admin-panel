@@ -33,15 +33,7 @@ export default function ProductsPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold tracking-tight">Products</h1>
-        <div className="flex items-center gap-4">
-          <Input
-            className="rounded-lg bg-black text-white placeholder:text-white"
-            type="text"
-            value={query}
-            placeholder="Search products by title..."
-            onChange={(e) => setQuery(e.target.value)}
-          />
-        </div>
+
         <Button asChild>
           <Link href="/products/add">
             <Plus className="mr-2 h-4 w-4" />
@@ -54,6 +46,15 @@ export default function ProductsPage() {
         <CardHeader>
           <CardTitle>Product List</CardTitle>
           <CardDescription>Manage your products inventory.</CardDescription>
+          <div className="flex items-center gap-4">
+            <Input
+              className="rounded-lg text-black"
+              type="text"
+              value={query}
+              placeholder="Search products by title..."
+              onChange={(e) => setQuery(e.target.value)}
+            />
+          </div>
         </CardHeader>
         <CardContent>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
