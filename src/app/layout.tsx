@@ -37,7 +37,7 @@ export default function DashboardLayout({
             {/* sidebar Header */}
             <header className="flex h-16 items-center justify-between border-b-2 bg-yellow-200 px-6">
               <div className="flex items-center gap-2">
-                <SidebarTrigger className="h-8 w-8" />
+                <SidebarTrigger className="h-8 w-8 hover:bg-black hover:text-yellow-300" />
               </div>
               <div className="flex w-full items-center justify-center text-3xl font-bold">
                 {" "}
