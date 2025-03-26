@@ -159,7 +159,12 @@ export default function AddEventPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" asChild>
+        <Button
+          variant="ghost"
+          className="hover:bg-yellow-200"
+          size="icon"
+          asChild
+        >
           <Link href="/events">
             <ArrowLeft className="h-4 w-4" />
             <span className="sr-only">Back</span>
