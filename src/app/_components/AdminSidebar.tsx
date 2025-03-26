@@ -1,16 +1,8 @@
 "use client";
 
-import {
-  HeartHandshake,
-  LayoutDashboard,
-  Package,
-  Rss,
-  Ticket,
-  User,
-} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-
+import { BiSolidPackage } from "react-icons/bi";
 import {
   Sidebar,
   SidebarContent,
@@ -20,7 +12,10 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-
+import { FaUsers } from "react-icons/fa";
+import { BsCalendar2EventFill } from "react-icons/bs";
+import { BiSolidDonateBlood } from "react-icons/bi";
+import { SiBlogger } from "react-icons/si";
 export function AdminSidebar() {
   const pathname = usePathname();
 
@@ -33,14 +28,14 @@ export function AdminSidebar() {
       <SidebarHeader className="bg-yellow-300">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
+            <SidebarMenuButton
+              size="lg"
+              className="hover:bg-yellow-300 active:bg-yellow-300"
+              asChild
+            >
               <Link href="/">
-                <div className="flex aspect-square size-10 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <LayoutDashboard className="size-4" />
-                </div>
                 <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="text-2xl font-semibold">Admin Panel</span>
-                  <span className="text-sm">v1.0.0</span>
+                  <span className="text-2xl font-semibold">Logo</span>
                 </div>
               </Link>
             </SidebarMenuButton>
@@ -56,7 +51,7 @@ export function AdminSidebar() {
               isActive={isActive("/products")}
             >
               <Link href="/products/">
-                <Package className="h-8 w-8" />
+                <BiSolidPackage style={{ width: "32px", height: "32px" }} />
                 <span className="text-lg">Products</span>
               </Link>
             </SidebarMenuButton>
@@ -69,7 +64,7 @@ export function AdminSidebar() {
               isActive={isActive("/users")}
             >
               <Link href="/users">
-                <User className="h-8 w-8" />
+                <FaUsers style={{ width: "32px", height: "32px" }} />
                 <span className="text-lg">Users</span>
               </Link>
             </SidebarMenuButton>
@@ -82,7 +77,9 @@ export function AdminSidebar() {
               isActive={isActive("/events")}
             >
               <Link href="/events">
-                <Ticket className="h-8 w-8" />
+                <BsCalendar2EventFill
+                  style={{ width: "32px", height: "32px" }}
+                />
                 <span className="text-lg">Events</span>
               </Link>
             </SidebarMenuButton>
@@ -95,7 +92,7 @@ export function AdminSidebar() {
               isActive={isActive("/donations")}
             >
               <Link href="/donations">
-                <HeartHandshake className="h-8 w-8" />
+                <BiSolidDonateBlood style={{ width: "32px", height: "32px" }} />
                 <span className="text-lg">Donation History</span>
               </Link>
             </SidebarMenuButton>
@@ -107,7 +104,7 @@ export function AdminSidebar() {
               isActive={isActive("/blogs")}
             >
               <Link href="/blogs">
-                <Rss />
+                <SiBlogger style={{ width: "32px", height: "32px" }} />
                 <span className="text-lg">Blogs</span>
               </Link>
             </SidebarMenuButton>
