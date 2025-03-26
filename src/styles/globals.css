@@ -6,7 +6,9 @@
 html {
   font-size: 18px;
 }
-
+textarea {
+  resize: none;
+}
 /* CSS Resets */
 html,
 body,
