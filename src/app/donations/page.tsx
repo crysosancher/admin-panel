@@ -164,9 +164,9 @@ export default function DonationsPage() {
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="Donation Type" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-yellow-100">
                 {donationTypes.map((type) => (
-                  <SelectItem key={type} value={type}>
+                  <SelectItem className="" key={type} value={type}>
                     {type === "ALL" ? "All Types" : type}
                   </SelectItem>
                 ))}
@@ -216,6 +216,7 @@ export default function DonationsPage() {
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious
+                    className="hover:bg-yellow-100"
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
@@ -239,6 +240,7 @@ export default function DonationsPage() {
                 ))}
                 <PaginationItem>
                   <PaginationNext
+                    className="hover:bg-yellow-100"
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
