@@ -69,18 +69,18 @@ export default function ProductsPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product: Product) => (
                 <Dialog key={product.id}>
                   <Card className="overflow-hidden">
-                    <div className="aspect-square bg-muted">
+                    <div className="h-[20rem ] relative aspect-square w-full">
                       <Image
                         src={product.image as string}
                         alt="Product Image"
                         width={400}
-                        height={300}
-                        layout="responsive"
+                        height={400}
+                        className="h-full w-full object-cover"
                       />
                     </div>
                     <CardContent className="p-4">

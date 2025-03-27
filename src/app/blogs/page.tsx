@@ -172,57 +172,69 @@ export default function BlogsPage() {
         {filteredBlogs.length > 0 ? (
           filteredBlogs.map((blog: Blog) => (
             <Card key={blog.id} className="flex flex-col">
-              <CardHeader>
-                <CardTitle className="line-clamp-2">{blog.title}</CardTitle>
-                <CardDescription>
-                  {new Date(blog.date).toLocaleDateString()}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="relative aspect-video flex-grow">
+              <div className="relative h-[15rem] w-full">
+                {" "}
                 <Image
                   src={blog.image || "/placeholder.svg"}
                   alt={blog.title}
-                  fill
-                  className="object-cover"
+                  width={300}
+                  height={300}
+                  className="h-full w-full object-cover"
                 />
+              </div>
+
+              <CardContent className="space-y-2">
+                <CardTitle className="mt-4 line-clamp-2">
+                  {blog.title}
+                </CardTitle>
+                <CardDescription>
+                  {new Date(blog.date).toLocaleDateString()}
+                </CardDescription>
+                <div className="mt-4 flex w-full justify-between">
+                  {" "}
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    asChild
+                    className="mr-2 w-1/2"
+                  >
+                    <Link href={`/blogs/edit/${blog.id}`}>
+                      <Edit className="mr-1 h-3.5 w-3.5" />
+                      Edit
+                    </Link>
+                  </Button>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        className="w-1/2"
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => setBlogToDelete(blog)}
+                      >
+                        <Trash2 className="mr-1 h-3.5 w-3.5" />
+                        Delete
+                      </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>
+                          Are you absolutely sure?
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                          This action cannot be undone. This will permanently
+                          delete the blog post "{blogToDelete?.title}".
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleDeleteBlog}>
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </CardContent>
-              <CardFooter className="flex justify-between pt-4">
-                <Button variant="outline" size="sm" asChild className="mr-2">
-                  <Link href={`/blogs/edit/${blog.id}`}>
-                    <Edit className="mr-1 h-3.5 w-3.5" />
-                    Edit
-                  </Link>
-                </Button>
-                <AlertDialog>
-                  <AlertDialogTrigger asChild>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => setBlogToDelete(blog)}
-                    >
-                      <Trash2 className="mr-1 h-3.5 w-3.5" />
-                      Delete
-                    </Button>
-                  </AlertDialogTrigger>
-                  <AlertDialogContent>
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>
-                        Are you absolutely sure?
-                      </AlertDialogTitle>
-                      <AlertDialogDescription>
-                        This action cannot be undone. This will permanently
-                        delete the blog post "{blogToDelete?.title}".
-                      </AlertDialogDescription>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel>Cancel</AlertDialogCancel>
-                      <AlertDialogAction onClick={handleDeleteBlog}>
-                        Continue
-                      </AlertDialogAction>
-                    </AlertDialogFooter>
-                  </AlertDialogContent>
-                </AlertDialog>
-              </CardFooter>
             </Card>
           ))
         ) : (

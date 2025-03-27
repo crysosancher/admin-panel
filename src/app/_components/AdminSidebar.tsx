@@ -44,22 +44,22 @@ export function AdminSidebar() {
       </SidebarHeader>
       <SidebarContent className="bg-yellow-300">
         <SidebarMenu>
-          <SidebarMenuItem className="">
+          <SidebarMenuItem className="p-2">
             <SidebarMenuButton
-              className="rounded-none bg-yellow-300 p-6"
+              className="rounded-md bg-yellow-300 p-6"
               asChild
               isActive={isActive("/products")}
             >
-              <Link href="/products/">
+              <Link className="rounded-md" href="/products/">
                 <BiSolidPackage style={{ width: "32px", height: "32px" }} />
                 <span className="text-lg">Products</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="bg-yellow-300">
+          <SidebarMenuItem className="px-2">
             <SidebarMenuButton
-              className="rounded-none bg-yellow-300 p-6"
+              className="rounded-md bg-yellow-300 p-6"
               asChild
               isActive={isActive("/users")}
             >
@@ -70,24 +70,24 @@ export function AdminSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="">
+          <SidebarMenuItem className="p-2">
             <SidebarMenuButton
-              className="rounded-none bg-yellow-300 p-6"
+              className="rounded-md bg-yellow-300 p-6"
               asChild
               isActive={isActive("/events")}
             >
               <Link href="/events">
                 <BsCalendar2EventFill
-                  style={{ width: "32px", height: "32px" }}
+                  style={{ width: "26px", height: "26px" }}
                 />
                 <span className="text-lg">Events</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="">
+          <SidebarMenuItem className="p-2">
             <SidebarMenuButton
-              className="rounded-none bg-yellow-300 p-6"
+              className="rounded-md bg-yellow-300 p-6"
               asChild
               isActive={isActive("/donations")}
             >
@@ -97,9 +97,10 @@ export function AdminSidebar() {
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
-          <SidebarMenuItem className="">
+
+          <SidebarMenuItem className="p-2">
             <SidebarMenuButton
-              className="rounded-none bg-yellow-300 p-6"
+              className="rounded-md bg-yellow-300 p-6"
               asChild
               isActive={isActive("/blogs")}
             >

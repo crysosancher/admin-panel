@@ -129,7 +129,7 @@ export default function EditProductForm({
           asChild
         >
           <Link href="/products">
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft style={{ width: "24px", height: "24px" }} />
             <span className="sr-only">Back</span>
           </Link>
         </Button>
@@ -218,13 +218,13 @@ export default function EditProductForm({
                           </div>
                           {preview && (
                             <div className="relative">
-                              <div className="relative aspect-video w-full overflow-hidden rounded-md">
+                              <div className="relative aspect-video h-[15rem] w-full rounded-md">
                                 <Image
                                   src={preview as string}
                                   alt="Preview"
                                   height={300}
                                   width={500}
-                                  className="object-cover"
+                                  className="h-full w-full object-contain"
                                 />
                               </div>
                               <Button

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Upload, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -76,12 +76,17 @@ const formSchema = z.object({
 export default function EditEventPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const router = useRouter();
-  const [preview, setPreview] = React.useState<string | ArrayBuffer | null>(
-    null,
-  );
+  const [preview, setPreview] = useState<string | ArrayBuffer | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { getEventById, updateEvent } = useEventStore();
   const event = getEventById(id);
+
+  // Add useEffect to set the preview when the event is loaded
+  useEffect(() => {
+    if (event && event.image) {
+      setPreview(event.image);
+    }
+  }, [event]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -183,8 +188,8 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
     <div className="space-y-6">
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="icon" asChild>
-          <Link href="/events">
-            <ArrowLeft className="h-4 w-4" />
+          <Link className="hover:bg-yellow-200" href="/events">
+            <ArrowLeft style={{ width: "24px", height: "24px" }} />
             <span className="sr-only">Back</span>
           </Link>
         </Button>
@@ -217,40 +222,54 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
                   control={form.control}
                   name="image"
                   render={() => (
-                    <FormItem className="">
-                      <FormLabel
-                        className={
-                          fileRejections.length !== 0 ? "text-destructive" : ""
-                        }
-                      >
-                        <h2 className="text-xl font-semibold tracking-tight">
-                          Event Image
-                        </h2>
-                      </FormLabel>
-                      <FormControl>
-                        <div
-                          {...getRootProps()}
-                          className="mx-auto flex h-full cursor-pointer flex-col items-center justify-center gap-y-2 rounded-lg border border-foreground bg-white p-8 shadow-sm shadow-foreground"
-                        >
+                    <FormItem>
+                      <FormLabel>Product Image</FormLabel>
+                      <FormControl className="flex justify-between">
+                        <div className="space-y-4">
+                          <div
+                            {...getRootProps()}
+                            className={`flex cursor-pointer items-center justify-center rounded-md border-2 border-dashed p-6 ${
+                              isDragActive
+                                ? "border-primary bg-primary/10"
+                                : "border-border"
+                            }`}
+                          >
+                            <input {...getInputProps()} />
+                            <div className="flex flex-col items-center gap-2">
+                              <Upload className="h-8 w-8 text-muted-foreground" />
+                              <p className="text-sm text-muted-foreground">
+                                {isDragActive
+                                  ? "Drop the image here"
+                                  : "Drag & drop an image here, or click to select"}
+                              </p>
+                            </div>
+                            <Input type="hidden" />
+                          </div>
                           {preview && (
-                            <Image
-                              src={preview as string}
-                              alt="Uploaded image"
-                              className="max-h-[200px] rounded-lg object-contain"
-                              width={400}
-                              height={300}
-                              layout="intrinsic"
-                            />
-                          )}
-                          <Input
-                            {...getInputProps()}
-                            type="file"
-                            className="hidden"
-                          />
-                          {isDragActive ? (
-                            <p>Drop the image!</p>
-                          ) : (
-                            <p>Click or drag to replace the event image</p>
+                            <div className="relative">
+                              <div className="relative aspect-video h-[15rem] w-full rounded-md">
+                                <Image
+                                  src={preview as string}
+                                  alt="Preview"
+                                  height={300}
+                                  width={500}
+                                  className="h-full w-full object-contain"
+                                />
+                              </div>
+                              <Button
+                                type="button"
+                                variant="destructive"
+                                size="icon"
+                                className="absolute right-2 top-2"
+                                onClick={() => {
+                                  setPreview(null);
+                                  form.setValue("image", "");
+                                }}
+                              >
+                                <X className="h-4 w-4" />
+                                <span className="sr-only">Remove image</span>
+                              </Button>
+                            </div>
                           )}
                         </div>
                       </FormControl>
@@ -266,6 +285,7 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
                   )}
                 />
               </div>
+
               <FormField
                 control={form.control}
                 name="days"

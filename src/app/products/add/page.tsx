@@ -30,6 +30,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import ProductModal from "../_components/ProductModal";
 
 const formSchema = z.object({
   title: z.string().min(2, "Product title must be at least 2 characters."),
@@ -114,7 +115,7 @@ export default function AddProductForm() {
           asChild
         >
           <Link href="/products">
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft style={{ width: "24px", height: "24px" }} />
             <span className="sr-only">Back</span>
           </Link>
         </Button>
@@ -218,13 +219,13 @@ export default function AddProductForm() {
                                 </div>
                                 {preview && (
                                   <div className="relative">
-                                    <div className="relative aspect-video w-full overflow-hidden rounded-md">
+                                    <div className="relative aspect-video h-[15rem] w-full overflow-hidden rounded-md">
                                       <Image
                                         src={preview as string}
                                         alt="Preview"
                                         height={300}
                                         width={500}
-                                        className="object-cover"
+                                        className="h-full w-full object-contain"
                                       />
                                     </div>
                                     <Button
@@ -287,120 +288,9 @@ export default function AddProductForm() {
                     </FormItem>
                   )}
                 />
-
-                <FormField
-                  control={form.control}
-                  name="sizes"
-                  render={({ field }) => (
-                    <FormItem className="space-x-2">
-                      <FormLabel className="text-lg">Sizes</FormLabel>
-                      <FormControl>
-                        <select
-                          onChange={(e) => field.onChange(e.target.value)}
-                          defaultValue={field.value}
-                          className="rounded border bg-white p-2"
-                        >
-                          <option value="">Select available sizes</option>
-                          <option value="s">S</option>
-                          <option value="m">M</option>
-                          <option value="l">L</option>
-                          <option value="xl">XL</option>
-                          <option value="xxl">XXL</option>
-                          <option value="all">All Sizes</option>
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="color"
-                  render={({ field }) => (
-                    <FormItem className="space-x-2">
-                      <FormLabel className="text-lg">Color</FormLabel>
-                      <FormControl>
-                        <select
-                          onChange={(e) => field.onChange(e.target.value)}
-                          defaultValue={field.value}
-                          className="rounded border bg-white p-2"
-                        >
-                          <option value="">Select color</option>
-                          <option value="black">Black</option>
-                          <option value="white">White</option>
-                          <option value="red">Red</option>
-                          <option value="blue">Blue</option>
-                          <option value="green">Green</option>
-                          <option value="yellow">Yellow</option>
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="price"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-lg">Price</FormLabel>
-                      <FormControl>
-                        <Input
-                          className="bg-white"
-                          type="number"
-                          min="0"
-                          step="0.01"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="mrp"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-lg">MRP</FormLabel>
-                      <FormControl>
-                        <Input
-                          className="bg-white"
-                          type="number"
-                          min="0"
-                          step="0.01"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>Maximum Retail Price</FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="available"
-                  render={({ field }) => (
-                    <FormItem className="space-x-2">
-                      <FormLabel className="text-lg">Available</FormLabel>
-                      <FormControl>
-                        <select
-                          onChange={(e) => field.onChange(e.target.value)}
-                          defaultValue={field.value}
-                          className="rounded border bg-white p-2"
-                        >
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="">
+                  <ProductModal />
+                </div>
               </div>
 
               {/* Action Buttons */}
