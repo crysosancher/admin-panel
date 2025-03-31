@@ -244,7 +244,7 @@ export default function AddBlogPage() {
           asChild
         >
           <Link href="/blogs">
-            <ArrowLeft style={{ width: "24px", height: "24px" }} />
+            <ArrowLeft style={{ width: "36px", height: "36px" }} />
             <span className="sr-only">Back</span>
           </Link>
         </Button>
