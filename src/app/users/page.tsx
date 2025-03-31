@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Trash2 } from "lucide-react";
+import { Search, Trash2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -139,8 +139,9 @@ export default function UsersPage() {
           <CardDescription>Manage your user database.</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="mb-4">
+          <div className="relative mb-4">
             <Input
+              className="pl-10"
               placeholder="Search by name or email"
               value={searchTerm}
               onChange={(e) => {
@@ -148,6 +149,7 @@ export default function UsersPage() {
                 setCurrentPage(1);
               }}
             />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 transform text-muted-foreground" />
           </div>
           <Table>
             <TableHeader className="bg-yellow-200">
@@ -176,7 +178,7 @@ export default function UsersPage() {
                         <Button
                           variant="outline"
                           size="icon"
-                          className="h-8 w-8 bg-red-700 text-yellow-200 hover:bg-red-600 hover:text-yellow-100"
+                          className="h-8 w-8 bg-red-700 text-white hover:bg-red-600 hover:text-yellow-100"
                           onClick={() => setCustomerToDelete(user)}
                         >
                           <Trash2 className="h-4 w-4" />
