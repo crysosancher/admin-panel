@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Input } from "@/components/ui/input";
-import { Plus, Edit, Trash2, CalendarIcon } from "lucide-react";
+import { Plus, Edit, Trash2, CalendarIcon, Search } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import useBlogStore, { Blog } from "@/stores/blogStore";
@@ -86,163 +86,174 @@ export default function BlogsPage() {
           </Link>
         </Button>
       </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Blog Management</CardTitle>
+          <CardDescription>View all Blogs Here</CardDescription>
+        </CardHeader>
+        <CardContent>
+          {/* Search and Filter Section */}
+          <div className="mb-6 flex items-center space-x-4">
+            {/* Search Input */}
+            <div className="relative flex-grow">
+              <Input
+                placeholder="Search blogs..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 transform text-muted-foreground" />
+            </div>
 
-      {/* Search and Filter Section */}
-      <div className="mb-6 flex items-center space-x-4">
-        {/* Search Input */}
-        <Input
-          placeholder="Search blogs..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-1/3"
-        />
-
-        {/* From Date Picker */}
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className="w-1/4 justify-start text-left font-normal"
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {fromDate ? (
-                format(fromDate, "LLL dd, y")
-              ) : (
-                <span>From Date</span>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              selected={fromDate}
-              onSelect={(date) => {
-                // Ensure the 'from' date is not after the 'to' date
-                if (date && (!toDate || !isAfter(date, toDate))) {
-                  setFromDate(date);
-                }
-              }}
-              disabled={(date) => toDate && isAfter(date, toDate)}
-            />
-          </PopoverContent>
-        </Popover>
-
-        {/* To Date Picker */}
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant="outline"
-              className="w-1/4 justify-start text-left font-normal"
-            >
-              <CalendarIcon className="mr-2 h-4 w-4" />
-              {toDate ? format(toDate, "LLL dd, y") : <span>To Date</span>}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              selected={toDate}
-              onSelect={(date) => {
-                // Ensure the 'to' date is not before the 'from' date
-                if (date && (!fromDate || !isBefore(date, fromDate))) {
-                  setToDate(date);
-                }
-              }}
-              disabled={(date) => fromDate && isBefore(date, fromDate)}
-            />
-          </PopoverContent>
-        </Popover>
-
-        {/* Reset Filters Button */}
-        {(fromDate || toDate || searchTerm) && (
-          <Button
-            variant="ghost"
-            onClick={() => {
-              resetDateFilters();
-              setSearchTerm("");
-            }}
-          >
-            Reset Filters
-          </Button>
-        )}
-      </div>
-
-      {/* Blogs Grid */}
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filteredBlogs.length > 0 ? (
-          filteredBlogs.map((blog: Blog) => (
-            <Card key={blog.id} className="flex flex-col">
-              <div className="relative h-[15rem] w-full">
-                {" "}
-                <Image
-                  src={blog.image || "/placeholder.svg"}
-                  alt={blog.title}
-                  width={300}
-                  height={300}
-                  className="h-full w-full object-cover"
+            {/* From Date Picker */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-1/4 justify-start text-left font-normal"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {fromDate ? (
+                    format(fromDate, "LLL dd, y")
+                  ) : (
+                    <span>From Date</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={fromDate}
+                  onSelect={(date) => {
+                    // Ensure the 'from' date is not after the 'to' date
+                    if (date && (!toDate || !isAfter(date, toDate))) {
+                      setFromDate(date);
+                    }
+                  }}
+                  disabled={(date) => toDate && isAfter(date, toDate)}
                 />
-              </div>
+              </PopoverContent>
+            </Popover>
 
-              <CardContent className="space-y-2">
-                <CardTitle className="mt-4 line-clamp-2">
-                  {blog.title}
-                </CardTitle>
-                <CardDescription>
-                  {new Date(blog.date).toLocaleDateString()}
-                </CardDescription>
-                <div className="mt-4 flex w-full justify-between">
-                  {" "}
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    asChild
-                    className="mr-2 w-1/2"
-                  >
-                    <Link href={`/blogs/edit/${blog.id}`}>
-                      <Edit className="mr-1 h-3.5 w-3.5" />
-                      Edit
-                    </Link>
-                  </Button>
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        className="w-1/2"
-                        variant="destructive"
-                        size="sm"
-                        onClick={() => setBlogToDelete(blog)}
-                      >
-                        <Trash2 className="mr-1 h-3.5 w-3.5" />
-                        Delete
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>
-                          Are you absolutely sure?
-                        </AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This action cannot be undone. This will permanently
-                          delete the blog post "{blogToDelete?.title}".
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={handleDeleteBlog}>
-                          Continue
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </div>
-              </CardContent>
-            </Card>
-          ))
-        ) : (
-          <div className="col-span-full py-10 text-center text-gray-500">
-            No blogs found matching your search or date range.
+            {/* To Date Picker */}
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-1/4 justify-start text-left font-normal"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {toDate ? format(toDate, "LLL dd, y") : <span>To Date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={toDate}
+                  onSelect={(date) => {
+                    // Ensure the 'to' date is not before the 'from' date
+                    if (date && (!fromDate || !isBefore(date, fromDate))) {
+                      setToDate(date);
+                    }
+                  }}
+                  disabled={(date) => fromDate && isBefore(date, fromDate)}
+                />
+              </PopoverContent>
+            </Popover>
+
+            {/* Reset Filters Button */}
+            {(fromDate || toDate || searchTerm) && (
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  resetDateFilters();
+                  setSearchTerm("");
+                }}
+              >
+                Reset Filters
+              </Button>
+            )}
           </div>
-        )}
-      </div>
+
+          {/* Blogs Grid */}
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {filteredBlogs.length > 0 ? (
+              filteredBlogs.map((blog: Blog) => (
+                <Card key={blog.id} className="flex flex-col">
+                  <div className="relative h-[15rem] w-full">
+                    {" "}
+                    <Image
+                      src={blog.image || "/placeholder.svg"}
+                      alt={blog.title}
+                      width={300}
+                      height={300}
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+
+                  <CardContent className="space-y-2">
+                    <CardTitle className="mt-4 line-clamp-2">
+                      {blog.title}
+                    </CardTitle>
+                    <CardDescription>
+                      {new Date(blog.date).toLocaleDateString()}
+                    </CardDescription>
+                    <div className="mt-4 flex w-full justify-between">
+                      {" "}
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        asChild
+                        className="mr-2 w-1/2"
+                      >
+                        <Link href={`/blogs/edit/${blog.id}`}>
+                          <Edit className="mr-1 h-3.5 w-3.5" />
+                          Edit
+                        </Link>
+                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            className="w-1/2"
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => setBlogToDelete(blog)}
+                          >
+                            <Trash2 className="mr-1 h-3.5 w-3.5" />
+                            Delete
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Are you absolutely sure?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete the blog post "
+                              {blogToDelete?.title}".
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleDeleteBlog}>
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <div className="col-span-full py-10 text-center text-gray-500">
+                No blogs found matching your search or date range.
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
