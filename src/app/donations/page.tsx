@@ -31,6 +31,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { Search } from "lucide-react";
 
 // Sample donation data
 const donations = [
@@ -144,15 +145,19 @@ export default function DonationsPage() {
           <CardTitle>Donation History</CardTitle>
           <CardDescription>View all donations received.</CardDescription>
           <div className="mb-4 flex w-full space-x-4">
-            <Input
-              placeholder="Search by name or email"
-              value={searchTerm}
-              onChange={(e) => {
-                setSearchTerm(e.target.value);
-                setCurrentPage(1);
-              }}
-              className=""
-            />
+            <div className="relative flex-grow">
+              {" "}
+              <Input
+                placeholder="Search by name or email"
+                value={searchTerm}
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className="pl-10"
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 transform text-muted-foreground" />
+            </div>
 
             <Select
               value={donationTypeFilter}
@@ -161,12 +166,16 @@ export default function DonationsPage() {
                 setCurrentPage(1);
               }}
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-[180px] bg-yellow-100 text-black hover:bg-yellow-200 focus:bg-yellow-200 data-[state=open]:bg-yellow-100">
                 <SelectValue placeholder="Donation Type" />
               </SelectTrigger>
-              <SelectContent className="bg-yellow-100">
+              <SelectContent className="border-yellow-300 bg-yellow-100">
                 {donationTypes.map((type) => (
-                  <SelectItem className="" key={type} value={type}>
+                  <SelectItem
+                    className="hover:bg-yellow-200 focus:bg-yellow-200 data-[state=highlighted]:bg-yellow-200"
+                    key={type}
+                    value={type}
+                  >
                     {type === "ALL" ? "All Types" : type}
                   </SelectItem>
                 ))}
