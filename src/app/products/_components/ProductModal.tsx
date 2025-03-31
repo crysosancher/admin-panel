@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -20,9 +20,10 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Plus } from "lucide-react";
 
-// Zod Schema
-const formSchema = z.object({
+// Zod Schema for Product Variants
+const variantSchema = z.object({
   sizes: z.string().nonempty("Please select a size"),
   color: z.string().nonempty("Please select a color"),
   price: z.coerce.number().min(0, "Price must be positive"),
@@ -30,12 +31,22 @@ const formSchema = z.object({
   available: z.enum(["yes", "no"]),
 });
 
-export default function ProductModal() {
+interface ProductVariantModalProps {
+  onVariantAdd: (variant: z.infer<typeof variantSchema>) => void;
+  defaultValues?: z.infer<typeof variantSchema>;
+  triggerButton?: React.ReactNode;
+}
+
+export default function ProductVariantModal({
+  onVariantAdd,
+  defaultValues,
+  triggerButton,
+}: ProductVariantModalProps) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
+  const form = useForm<z.infer<typeof variantSchema>>({
+    resolver: zodResolver(variantSchema),
+    defaultValues: defaultValues || {
       sizes: "",
       color: "",
       price: 0,
@@ -44,22 +55,52 @@ export default function ProductModal() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  useEffect(() => {
+    if (defaultValues) {
+      form.reset(defaultValues);
+    }
+  }, [defaultValues, form]);
+
+  const onSubmit = (values: z.infer<typeof variantSchema>) => {
+    onVariantAdd(values);
     setIsOpen(false);
-  }
+    form.reset();
+  };
+
+  // Custom handler for opening the dialog
+  const handleOpenDialog = (e: React.MouseEvent) => {
+    // Only prevent default - don't stop propagation
+    e.preventDefault();
+    setIsOpen(true);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button>Open Product Modal</Button>
+        {triggerButton || (
+          <Button type="button" onClick={handleOpenDialog}>
+            <Plus className="h-4 w-4" />
+          </Button>
+        )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+
+      <DialogContent
+        className="sm:max-w-[425px]"
+        onClick={(e) => e.stopPropagation()}
+      >
         <DialogHeader>
-          <DialogTitle>Product Details</DialogTitle>
+          <DialogTitle>
+            {defaultValues ? "Edit Product Variant" : "Add Product Variant"}
+          </DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              form.handleSubmit(onSubmit)(e);
+            }}
+            className="space-y-4"
+          >
             <FormField
               control={form.control}
               name="sizes"
@@ -69,7 +110,7 @@ export default function ProductModal() {
                   <FormControl>
                     <select
                       onChange={(e) => field.onChange(e.target.value)}
-                      defaultValue={field.value}
+                      value={field.value}
                       className="w-full rounded border bg-white p-2"
                     >
                       <option value="">Select available sizes</option>
@@ -95,7 +136,7 @@ export default function ProductModal() {
                   <FormControl>
                     <select
                       onChange={(e) => field.onChange(e.target.value)}
-                      defaultValue={field.value}
+                      value={field.value}
                       className="w-full rounded border bg-white p-2"
                     >
                       <option value="">Select color</option>
@@ -176,7 +217,7 @@ export default function ProductModal() {
                   <FormControl>
                     <select
                       onChange={(e) => field.onChange(e.target.value)}
-                      defaultValue={field.value}
+                      value={field.value}
                       className="w-full rounded border bg-white p-2"
                     >
                       <option value="yes">Yes</option>
@@ -196,7 +237,12 @@ export default function ProductModal() {
               >
                 Cancel
               </Button>
-              <Button type="submit">Save Changes</Button>
+              <Button
+                type="button"
+                onClick={() => form.handleSubmit(onSubmit)()}
+              >
+                Save Variant
+              </Button>
             </div>
           </form>
         </Form>
