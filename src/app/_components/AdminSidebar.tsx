@@ -44,7 +44,7 @@ export function AdminSidebar() {
       </SidebarHeader>
       <SidebarContent className="bg-yellow-300">
         <SidebarMenu>
-          <SidebarMenuItem className="p-2">
+          <SidebarMenuItem className="px-2 py-1">
             <SidebarMenuButton
               className="rounded-md bg-yellow-300 p-6"
               asChild
@@ -57,7 +57,7 @@ export function AdminSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="px-2">
+          <SidebarMenuItem className="px-2 py-1">
             <SidebarMenuButton
               className="rounded-md bg-yellow-300 p-6"
               asChild
@@ -70,7 +70,7 @@ export function AdminSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="p-2">
+          <SidebarMenuItem className="px-2 py-1">
             <SidebarMenuButton
               className="rounded-md bg-yellow-300 p-6"
               asChild
@@ -85,7 +85,7 @@ export function AdminSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="p-2">
+          <SidebarMenuItem className="px-2 py-1">
             <SidebarMenuButton
               className="rounded-md bg-yellow-300 p-6"
               asChild
@@ -98,7 +98,7 @@ export function AdminSidebar() {
             </SidebarMenuButton>
           </SidebarMenuItem>
 
-          <SidebarMenuItem className="p-2">
+          <SidebarMenuItem className="px-2 py-1">
             <SidebarMenuButton
               className="rounded-md bg-yellow-300 p-6"
               asChild
