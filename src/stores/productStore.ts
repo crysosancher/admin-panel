@@ -1,20 +1,23 @@
-// stores/productStore.ts
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { v4 as uuidv4 } from "uuid";
 import { immer } from "zustand/middleware/immer";
+
+export interface ProductVariant {
+  sizes: string;
+  color: string;
+  price: number;
+  mrp: number;
+  available: "yes" | "no";
+}
 
 export interface Product {
   id: string;
   title: string;
   description?: string;
   rating: number;
-  sizes: string;
-  color: string;
-  price: number;
-  mrp: number;
-  available: string;
   image: string;
+  variants: ProductVariant[];
 }
 
 interface ProductStore {
@@ -53,7 +56,6 @@ const useProductStore = create<ProductStore>()(
             (product: Product) => product.id !== id,
           );
         }),
-
       searchProducts: (query: string) => {
         const lowerCaseQuery = query.toLowerCase();
         return get().products.filter((product) =>
