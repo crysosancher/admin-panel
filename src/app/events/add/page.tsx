@@ -166,7 +166,7 @@ export default function AddEventPage() {
           asChild
         >
           <Link href="/events">
-            <ArrowLeft style={{ width: "24px", height: "24px" }} />
+            <ArrowLeft style={{ width: "36px", height: "36px" }} />
             <span className="sr-only">Back</span>
           </Link>
         </Button>
