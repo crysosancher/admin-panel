@@ -18,7 +18,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, Trash2 } from "lucide-react";
+import { Edit, Plus, Search, Trash2 } from "lucide-react";
 import useProductStore, { Product } from "@/stores/productStore";
 import Image from "next/image";
 import { toast } from "react-toastify";
@@ -58,18 +58,19 @@ export default function ProductsPage() {
         <CardHeader>
           <CardTitle>Product List</CardTitle>
           <CardDescription>Manage your products inventory.</CardDescription>
-          <div className="flex items-center gap-4">
+          <div className="relative flex items-center gap-4">
             <Input
-              className="rounded-lg text-black"
+              className="rounded-lg pl-10 text-black"
               type="text"
               value={query}
               placeholder="Search products by title..."
               onChange={(e) => setQuery(e.target.value)}
             />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 transform text-muted-foreground" />
           </div>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredProducts.length > 0 ? (
               filteredProducts.map((product: Product) => (
                 <Dialog key={product.id}>
@@ -85,19 +86,14 @@ export default function ProductsPage() {
                     </div>
                     <CardContent className="p-4">
                       <h3 className="font-semibold">{product.title}</h3>
-                      <div className="mt-2 flex items-center justify-between">
-                        <span className="text-sm font-medium">
-                          ${product.price}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                          {product.available === "yes"
-                            ? "In Stock"
-                            : "Out of Stock"}
-                        </span>
-                      </div>
+
                       <div className="mt-4 flex items-center gap-2">
                         <Button variant="outline" size="sm" className="w-full">
-                          <Link href={`/products/edit/${product.id}`}>
+                          <Link
+                            className="flex gap-2"
+                            href={`/products/edit/${product.id}`}
+                          >
+                            <Edit className="mr-1 h-3.5 w-3.5" />
                             Edit
                           </Link>
                         </Button>
