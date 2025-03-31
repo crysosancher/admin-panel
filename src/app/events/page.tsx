@@ -18,10 +18,30 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import useEventStore from "@/stores/eventStore";
-import { Plus, Calendar, MapPin, Clock, Search } from "lucide-react";
+import {
+  Plus,
+  Calendar,
+  MapPin,
+  Clock,
+  Search,
+  Trash2,
+  Edit,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import { DeleteConfirmationModal } from "../_components/DeleteConfirmationModal";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export default function EventsPage() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,33 +78,6 @@ export default function EventsPage() {
         </Button>
       </div>
 
-      <div className="mb-4 flex items-center gap-4">
-        <div className="relative flex-grow">
-          <Input
-            placeholder="Search events by title or location"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10"
-          />
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 transform text-muted-foreground" />
-        </div>
-        <Select
-          value={filterType}
-          onValueChange={(value: "all" | "free" | "paid") =>
-            setFilterType(value)
-          }
-        >
-          <SelectTrigger className="w-[180px]">
-            <SelectValue placeholder="Filter by Type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Events</SelectItem>
-            <SelectItem value="free">Free Events</SelectItem>
-            <SelectItem value="paid">Paid Events</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-
       <Card>
         <CardHeader>
           <CardTitle>Event List</CardTitle>
@@ -92,9 +85,50 @@ export default function EventsPage() {
             {filteredEvents.length} event{filteredEvents.length !== 1 && "s"}{" "}
             found
           </CardDescription>
+          <div className="mb-4 flex items-center gap-4">
+            <div className="relative flex-grow">
+              <Input
+                placeholder="Search events by title or location"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-10"
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 transform text-muted-foreground" />
+            </div>
+            <Select
+              value={filterType}
+              onValueChange={(value: "all" | "free" | "paid") =>
+                setFilterType(value)
+              }
+            >
+              <SelectTrigger className="w-[180px] bg-yellow-100 text-black hover:bg-yellow-200 focus:bg-yellow-200 data-[state=open]:bg-yellow-100">
+                <SelectValue placeholder="Filter by Type" />
+              </SelectTrigger>
+              <SelectContent className="border-yellow-300 bg-yellow-100">
+                <SelectItem
+                  value="all"
+                  className="hover:bg-yellow-200 focus:bg-yellow-200 data-[state=highlighted]:bg-yellow-200"
+                >
+                  All Events
+                </SelectItem>
+                <SelectItem
+                  value="free"
+                  className="hover:bg-yellow-200 focus:bg-yellow-200 data-[state=highlighted]:bg-yellow-200"
+                >
+                  Free Events
+                </SelectItem>
+                <SelectItem
+                  value="paid"
+                  className="hover:bg-yellow-200 focus:bg-yellow-200 data-[state=highlighted]:bg-yellow-200"
+                >
+                  Paid Events
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filteredEvents.length > 0 ? (
               filteredEvents.map((event, i) => (
                 <Card key={i} className="overflow-hidden">
@@ -139,16 +173,42 @@ export default function EventsPage() {
                         className="w-full"
                         asChild
                       >
-                        <Link href={`/events/edit/${event.id}`}>Edit</Link>
+                        <Link href={`/events/edit/${event.id}`}>
+                          <Edit className="mr-1 h-3.5 w-3.5" />
+                          Edit
+                        </Link>
                       </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        className="w-full"
-                        onClick={() => handleDelete(event.id)}
-                      >
-                        Delete
-                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            className="w-full"
+                          >
+                            <Trash2 className="mr-1 h-3.5 w-3.5" />
+                            Delete
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>
+                              Are you absolutely sure?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will
+                              permanently delete the event.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              onClick={() => handleDelete(event.id)}
+                            >
+                              Continue
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </div>
                   </CardContent>
                 </Card>
