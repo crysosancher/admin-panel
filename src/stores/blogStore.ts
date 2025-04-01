@@ -15,7 +15,7 @@ interface BlogStore {
   blogs: Blog[];
   addBlog: (blog: Blog) => void;
   updateBlog: (blog: Blog) => void;
-  deleteBlog: (id: string) => void;
+  deleteBlog: (id: string | undefined) => void;
 }
 
 const useBlogStore = create<BlogStore>()(

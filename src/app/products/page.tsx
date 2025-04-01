@@ -115,7 +115,7 @@ export default function ProductsPage() {
                       <DialogTitle>Are you absolutely sure?</DialogTitle>
                       <DialogDescription>
                         This action cannot be undone. This will permanently
-                        delete the product "{product.title}" from your
+                        delete the product &quot;{productToDelete?.title}&quot;
                         inventory.
                       </DialogDescription>
                     </DialogHeader>

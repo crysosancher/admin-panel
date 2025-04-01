@@ -30,7 +30,7 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "react-toastify";
-import { DeleteConfirmationModal } from "../_components/DeleteConfirmationModal";
+
 import {
   AlertDialog,
   AlertDialogAction,

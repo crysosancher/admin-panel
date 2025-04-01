@@ -4,7 +4,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -123,14 +122,16 @@ export default function BlogsPage() {
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={fromDate}
+                  selected={fromDate as Date | undefined}
                   onSelect={(date) => {
                     // Ensure the 'from' date is not after the 'to' date
                     if (date && (!toDate || !isAfter(date, toDate))) {
                       setFromDate(date);
                     }
                   }}
-                  disabled={(date) => toDate && isAfter(date, toDate)}
+                  disabled={(date: Date) =>
+                    Boolean(toDate && isAfter(date, toDate))
+                  }
                 />
               </PopoverContent>
             </Popover>
@@ -149,14 +150,16 @@ export default function BlogsPage() {
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={toDate}
+                  selected={toDate as Date | undefined}
                   onSelect={(date) => {
                     // Ensure the 'to' date is not before the 'from' date
                     if (date && (!fromDate || !isBefore(date, fromDate))) {
                       setToDate(date);
                     }
                   }}
-                  disabled={(date) => fromDate && isBefore(date, fromDate)}
+                  disabled={(date: Date) =>
+                    Boolean(fromDate && isBefore(date, fromDate))
+                  }
                 />
               </PopoverContent>
             </Popover>
@@ -230,8 +233,8 @@ export default function BlogsPage() {
                             </AlertDialogTitle>
                             <AlertDialogDescription>
                               This action cannot be undone. This will
-                              permanently delete the blog post "
-                              {blogToDelete?.title}".
+                              permanently delete the blog post &quot;
+                              {blogToDelete?.title}&quot;.
                             </AlertDialogDescription>
                           </AlertDialogHeader>
                           <AlertDialogFooter>
