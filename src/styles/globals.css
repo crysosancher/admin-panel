@@ -149,8 +149,8 @@ table {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     /* changed for card */
-    --card: 0, 100%, 99%;
-    --card-foreground: 0 0% 3.9%;
+    /* --card: 0, 100%, 99%; */
+    /* --card-foreground: 0 0% 3.9%; */
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
     --primary: 0 0% 9%;
@@ -177,7 +177,7 @@ table {
     --sidebar-primary: 240 5.9% 10%;
     --sidebar-primary-foreground: 0 0% 98%;
     /* changed for sidebar */
-    --sidebar-accent: 52.76, 98.31%, 76.86%;
+    --sidebar-accent: 210, 14%, 83%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;

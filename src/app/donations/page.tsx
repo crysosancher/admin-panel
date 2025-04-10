@@ -166,13 +166,13 @@ export default function DonationsPage() {
                 setCurrentPage(1);
               }}
             >
-              <SelectTrigger className="w-[180px] bg-yellow-100 text-black hover:bg-yellow-200 focus:bg-yellow-200 data-[state=open]:bg-yellow-100">
+              <SelectTrigger className="w-[180px] bg-[#e9ecef] text-black hover:bg-[#FDFAF6] focus:bg-[#FDFAF6] data-[state=open]:bg-[#e9ecef]">
                 <SelectValue placeholder="Donation Type" />
               </SelectTrigger>
-              <SelectContent className="border-yellow-300 bg-yellow-100">
+              <SelectContent className="border-yellow-300 bg-[#e9ecef]">
                 {donationTypes.map((type) => (
                   <SelectItem
-                    className="hover:bg-yellow-200 focus:bg-yellow-200 data-[state=highlighted]:bg-yellow-200"
+                    className="hover:bg-[#FDFAF6] focus:bg-[#FDFAF6] data-[state=highlighted]:bg-[#FDFAF6]"
                     key={type}
                     value={type}
                   >
@@ -185,7 +185,7 @@ export default function DonationsPage() {
         </CardHeader>
         <CardContent>
           <Table>
-            <TableHeader className="bg-yellow-200">
+            <TableHeader className="bg-[#FDFAF6]">
               <TableRow>
                 <TableHead>S.No</TableHead>
                 <TableHead>Name</TableHead>
@@ -225,7 +225,7 @@ export default function DonationsPage() {
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious
-                    className="hover:bg-yellow-100"
+                    className="hover:bg-[#e9ecef]"
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
@@ -249,7 +249,7 @@ export default function DonationsPage() {
                 ))}
                 <PaginationItem>
                   <PaginationNext
-                    className="hover:bg-yellow-100"
+                    className="hover:bg-[#e9ecef]"
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();

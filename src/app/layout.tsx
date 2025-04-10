@@ -35,7 +35,7 @@ export default function DashboardLayout({
           <AdminSidebar />
           <SidebarInset>
             {/* sidebar Header */}
-            <header className="flex h-16 items-center justify-between border-b-2 bg-yellow-200 px-6">
+            <header className="flex h-16 items-center justify-between border-b-2 bg-[#FDFAF6] px-6">
               <div className="flex items-center gap-2">
                 <SidebarTrigger className="h-8 w-8 hover:bg-black hover:text-yellow-300" />
               </div>
@@ -45,7 +45,7 @@ export default function DashboardLayout({
               </div>
             </header>
             {/* body */}
-            <main className="flex-1 bg-yellow-200 p-6">{children}</main>
+            <main className="flex-1 bg-[#FDFAF6] p-6">{children}</main>
           </SidebarInset>
         </SidebarProvider>
         <ToastContainer />

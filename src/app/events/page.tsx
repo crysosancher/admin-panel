@@ -101,25 +101,25 @@ export default function EventsPage() {
                 setFilterType(value)
               }
             >
-              <SelectTrigger className="w-[180px] bg-yellow-100 text-black hover:bg-yellow-200 focus:bg-yellow-200 data-[state=open]:bg-yellow-100">
+              <SelectTrigger className="w-[180px] bg-[#e9ecef] text-black hover:bg-[#FDFAF6] focus:bg-[#FDFAF6] data-[state=open]:bg-[#e9ecef]">
                 <SelectValue placeholder="Filter by Type" />
               </SelectTrigger>
-              <SelectContent className="border-yellow-300 bg-yellow-100">
+              <SelectContent className="border-yellow-300 bg-[#e9ecef]">
                 <SelectItem
                   value="all"
-                  className="hover:bg-yellow-200 focus:bg-yellow-200 data-[state=highlighted]:bg-yellow-200"
+                  className="hover:bg-[#FDFAF6] focus:bg-[#FDFAF6] data-[state=highlighted]:bg-[#FDFAF6]"
                 >
                   All Events
                 </SelectItem>
                 <SelectItem
                   value="free"
-                  className="hover:bg-yellow-200 focus:bg-yellow-200 data-[state=highlighted]:bg-yellow-200"
+                  className="hover:bg-[#FDFAF6] focus:bg-[#FDFAF6] data-[state=highlighted]:bg-[#FDFAF6]"
                 >
                   Free Events
                 </SelectItem>
                 <SelectItem
                   value="paid"
-                  className="hover:bg-yellow-200 focus:bg-yellow-200 data-[state=highlighted]:bg-yellow-200"
+                  className="hover:bg-[#FDFAF6] focus:bg-[#FDFAF6] data-[state=highlighted]:bg-[#FDFAF6]"
                 >
                   Paid Events
                 </SelectItem>

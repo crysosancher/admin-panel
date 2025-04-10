@@ -152,7 +152,7 @@ export default function UsersPage() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 transform text-muted-foreground" />
           </div>
           <Table>
-            <TableHeader className="bg-yellow-200">
+            <TableHeader className="bg-[#FDFAF6]">
               <TableRow>
                 <TableHead>S.No</TableHead>
                 <TableHead>Name</TableHead>
@@ -216,7 +216,7 @@ export default function UsersPage() {
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious
-                    className="hover:bg-yellow-100"
+                    className="hover:bg-[#e9ecef]"
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
@@ -227,7 +227,7 @@ export default function UsersPage() {
                 {[...Array(totalPages)].map((_, i) => (
                   <PaginationItem key={i}>
                     <PaginationLink
-                      className="hover:bg-yellow-100"
+                      className="hover:bg-[#e9ecef]"
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
@@ -241,7 +241,7 @@ export default function UsersPage() {
                 ))}
                 <PaginationItem>
                   <PaginationNext
-                    className="hover:bg-yellow-100"
+                    className="hover:bg-[#e9ecef]"
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();

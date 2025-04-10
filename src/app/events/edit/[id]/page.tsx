@@ -188,7 +188,7 @@ export default function EditEventPage({ params }: { params: { id: string } }) {
     <div className="space-y-6">
       <div className="flex items-center gap-2">
         <Button variant="ghost" size="icon" asChild>
-          <Link className="hover:bg-yellow-200" href="/events">
+          <Link className="hover:bg-[#FDFAF6]" href="/events">
             <ArrowLeft style={{ width: "36px", height: "36px" }} />
             <span className="sr-only">Back</span>
           </Link>

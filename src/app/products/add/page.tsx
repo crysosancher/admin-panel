@@ -177,7 +177,7 @@ export default function AddProductForm() {
       <div className="flex items-center gap-2">
         <Button
           variant="ghost"
-          className="hover:bg-yellow-200"
+          className="hover:bg-[#FDFAF6]"
           size="icon"
           asChild
         >
@@ -348,7 +348,7 @@ export default function AddProductForm() {
                   <CardContent>
                     {productVariants.length > 0 ? (
                       <Table>
-                        <TableHeader className="bg-yellow-200">
+                        <TableHeader className="bg-[#FDFAF6]">
                           <TableRow>
                             <TableHead>S.No</TableHead>
                             <TableHead>Color</TableHead>

@@ -25,14 +25,10 @@ export function AdminSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="bg-yellow-300">
+      <SidebarHeader className="bg-[#FBFBFB]">
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              size="lg"
-              className="hover:bg-yellow-300 active:bg-yellow-300"
-              asChild
-            >
+            <SidebarMenuButton size="lg" className="" asChild>
               <Link href="/">
                 <div className="flex flex-col gap-0.5 leading-none">
                   <span className="text-2xl font-semibold">Logo</span>
@@ -42,11 +38,11 @@ export function AdminSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent className="bg-yellow-300">
+      <SidebarContent className="bg-[#Fdfaf6]">
         <SidebarMenu>
           <SidebarMenuItem className="px-2 py-1">
             <SidebarMenuButton
-              className="rounded-md bg-yellow-300 p-6"
+              className="rounded-md bg-[#e9ecef] p-6"
               asChild
               isActive={isActive("/products")}
             >
@@ -59,7 +55,7 @@ export function AdminSidebar() {
 
           <SidebarMenuItem className="px-2 py-1">
             <SidebarMenuButton
-              className="rounded-md bg-yellow-300 p-6"
+              className="rounded-md bg-[#e9ecef] p-6"
               asChild
               isActive={isActive("/users")}
             >
@@ -72,7 +68,7 @@ export function AdminSidebar() {
 
           <SidebarMenuItem className="px-2 py-1">
             <SidebarMenuButton
-              className="rounded-md bg-yellow-300 p-6"
+              className="rounded-md bg-[#e9ecef] p-6"
               asChild
               isActive={isActive("/events")}
             >
@@ -87,7 +83,7 @@ export function AdminSidebar() {
 
           <SidebarMenuItem className="px-2 py-1">
             <SidebarMenuButton
-              className="rounded-md bg-yellow-300 p-6"
+              className="rounded-md bg-[#e9ecef] p-6"
               asChild
               isActive={isActive("/donations")}
             >
@@ -100,7 +96,7 @@ export function AdminSidebar() {
 
           <SidebarMenuItem className="px-2 py-1">
             <SidebarMenuButton
-              className="rounded-md bg-yellow-300 p-6"
+              className="rounded-md bg-[#e9ecef] p-6"
               asChild
               isActive={isActive("/blogs")}
             >

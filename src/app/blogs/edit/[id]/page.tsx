@@ -282,7 +282,7 @@ export default function EditBlogPage({ params }: { params: { id: string } }) {
       <div className="flex items-center gap-2">
         <Button
           variant="ghost"
-          className="hover:bg-yellow-200"
+          className="hover:bg-[#FDFAF6]"
           size="icon"
           asChild
         >
